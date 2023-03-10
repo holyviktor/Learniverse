@@ -13,6 +13,7 @@ class User(models.Model):
     phone_number = models.CharField(max_lenght=20)
 
 
+
 class UserCourse(models.Model):
     date_start = models.DateTimeField()
     certified = models.BooleanField(default=False)
