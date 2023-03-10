@@ -33,8 +33,8 @@ class Lection(models.Model):
     #     for dish in self..all():
     #         yield dish
 
-    def __str__(self):
-        return f'{self.title}'
+    # def __str__(self):
+    #     return f'{self.title}'
 
     # class Meta:
     #     ordering = ('position', )

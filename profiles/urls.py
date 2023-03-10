@@ -10,6 +10,4 @@ urlpatterns = [
     path('', views.profiles_index),
     path('register', views.profiles_register),
     path('login', views.profiles_login),
-    path('wishlist', views.profiles_wishlist),
-    path('courses', views.profiles_courses),
 ]

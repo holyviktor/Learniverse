@@ -5,12 +5,12 @@ from courses.models import Course, Test
 
 # Create your models here.
 class User(models.Model):
-    name = models.CharField(max_lenght=40)
-    surname = models.CharField(max_lenght=40)
+    name = models.CharField(max_length=40)
+    surname = models.CharField(max_length=40)
     email = models.EmailField(max_length=100, unique=True)
     date_birth = models.DateField(blank=True)
     password = models.CharField(max_length=100)
-    phone_number = models.CharField(max_lenght=20)
+    phone_number = models.CharField(max_length=20)
 
 
 class UserCourse(models.Model):
@@ -21,6 +21,6 @@ class UserCourse(models.Model):
 
 
 class UserTest(models.Model):
-    grade = models.DecimalField(mex_digits=10, decimal_places=2)
+    grade = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tests')
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='users')
