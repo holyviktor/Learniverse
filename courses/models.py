@@ -1,9 +1,7 @@
 from django.db import models
 
-from teacher.models import Teacher
+from profiles.models import User
 
-
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -13,8 +11,8 @@ class Course(models.Model):
     name = models.CharField(max_length=50)
     duration = models.TimeField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='courses')
-    description = models.IntegerField(max_length=500)
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses_teacher')
+    description = models.TextField(max_length=500)
 
 
 class Module(models.Model):
@@ -54,3 +52,16 @@ class Answer(models.Model):
     title = models.CharField(max_length=50)
     correctness = models.BooleanField(default=False)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+
+
+class UserCourse(models.Model):
+    date_start = models.DateTimeField()
+    certified = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='users')
+
+
+class UserTest(models.Model):
+    grade = models.DecimalField(max_digits=10, decimal_places=2)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tests')
+    test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='users')
