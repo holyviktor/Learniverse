@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from .models import Category, Course
 
 
 # Create your views here.
@@ -8,11 +9,21 @@ def courses_index(request):
 
 
 def courses_id(request, id):
-    return HttpResponse(f"id {id}")
+    course = Course.objects.filter(id=id)
+    print(course)
+    if course is not None:
+
+        return render(request, 'course.html', context={"course": course[0]})
+    raise Http404('')
 
 
 def courses_category(request, name):
-    return HttpResponse(f"category {name}")
+    category = Category.objects.filter(name=name)
+    if category is not None:
+        category_id = category.first().id
+        courses_by_category = Course.objects.filter(category_id=category_id)
+        if courses_by_category is not None:
+            return render(request, 'courses.html', context={"courses": courses_by_category, 'category': name})
 
 
 def courses_search(request, name):
