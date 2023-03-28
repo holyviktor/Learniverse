@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+<h1>Course: {{ course.name }}</h1>
+{% if test %}
+    <h2>Test: {{ test.name }}</h2>
+    <div>
+        {% for question in questions %}
+            <div>{{ question.title }}</div>
+            {% for answer in  question.answers.all %}
+                <div>
+                    <input type="radio" id="{{ answer.id }}" name="answer" value="{{ answer.title }}">
+                    <label for="answer">{{ answer.title }}</label>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+</body>
+</html>
