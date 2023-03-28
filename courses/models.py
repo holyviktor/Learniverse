@@ -9,7 +9,7 @@ class Category(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=50)
-    duration = models.TimeField()
+    duration = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
     teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='courses_teacher')
     description = models.TextField(max_length=500)

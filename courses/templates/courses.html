@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+
+{% if category %}
+    <h2>Category: {{ category }}</h2>
+{% else  %}
+    <h2>Courses</h2>
+{% endif %}
+{% for course in courses %}
+    <h3>{{ course.name }}</h3>
+    <h4>{{ course.category.name }}</h4>
+    <h4>{{ course.description }}</h4>
+{% endfor %}
+</body>
+</html>
