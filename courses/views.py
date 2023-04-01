@@ -13,7 +13,12 @@ def courses_search(request, name):
 
 
 def courses_id_modules(request, id):
-    return HttpResponse("id_modules")
+    course = Course.objects.filter(id=id)
+    print(course)
+    if course:
+        modules = Module.objects.filter(course_id=course[0].id)
+        return render(request, 'course_modules.html', context={"course": course[0], "modules": modules})
+    return HttpResponseNotFound("not found")
 
 
 def courses_id_module_id_lecture(request, id, id_module, id_lecture):

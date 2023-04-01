@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module</title>
+</head>
+<body>
+<h1>Course: {{ course.name }}</h1>
+{% if modules %}
+    <h4>Modules:</h4>
+{% endif %}
+{% for module in modules %}
+    <div>
+    <h5>{{ module.name }}</h5>
+    <p>{{ module.duration }}</p>
+    </div>
+{% endfor %}
+</body>
+</html>
