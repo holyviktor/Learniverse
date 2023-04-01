@@ -5,7 +5,8 @@ from .models import Category, Course, Module, Lection, Test, Question, Answer
 
 # Create your views here.
 def courses_index(request):
-    return HttpResponse("courses")
+    courses = Course.objects.filter()
+    return render(request, 'courses.html', context={"courses": courses})
 
 
 def courses_search(request, name):
@@ -25,10 +26,6 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
-        # for question in questions:
-        #     answer = question.answers.all()
-        #     print(answer)
-        # answers = Answer.objects.filter()
         return render(request, 'lecture.html',
                       context={"course": course[0], "module": module[0], 'lecture': lectures[0]})
     return HttpResponseNotFound("not found")
