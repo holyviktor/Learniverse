@@ -12,9 +12,8 @@ def courses_search(request, name):
     return HttpResponse(f"search {name}")
 
 
-def courses_id_modules(request, id):
+def course_modules(request, id):
     course = Course.objects.filter(id=id)
-    print(course)
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
         return render(request, 'course_modules.html', context={"course": course[0], "modules": modules})
@@ -22,7 +21,17 @@ def courses_id_modules(request, id):
 
 
 def courses_id_module_id_lecture(request, id, id_module, id_lecture):
-    return HttpResponse("courses_id_module_id_lecture")
+    course = Course.objects.filter(id=id)
+    module = Module.objects.filter(id=id_module, course_id=id)
+    if module and course:
+        lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
+        # for question in questions:
+        #     answer = question.answers.all()
+        #     print(answer)
+        # answers = Answer.objects.filter()
+        return render(request, 'lecture.html',
+                      context={"course": course[0], "module": module[0], 'lecture': lectures[0]})
+    return HttpResponseNotFound("not found")
 
 
 def courses_id(request, id):
