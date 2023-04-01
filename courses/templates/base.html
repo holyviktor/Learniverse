@@ -1,0 +1,76 @@
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="../static/courses/css/style.css">
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <!-- підключення скриптів Bootstrap -->
+  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+<style>body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: green;
+}
+
+/* Стилі для шапки сайту */
+header {
+  background-color: #333;
+  color: #fff;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+/* Стилі для футера сайту */
+.footer {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* Стилі для контенту сайту */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  }
+</style>
+<body>
+    <header class="header">
+      <div class="container">
+        {% block header %}{% endblock %}
+      </div>
+    </header>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    <footer class="footer">
+      <div class="container">
+        {% block footer %}{% endblock %}
+      </div>
+    </footer>
+  </body>
+</html>
+

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'courses.apps.CoursesConfig',
     'profiles.apps.ProfilesConfig',
+    'bootstrap4',
 ]
 
 MIDDLEWARE = [

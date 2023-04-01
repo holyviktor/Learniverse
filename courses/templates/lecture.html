@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lecture {{ lecture.id }}</title>
-</head>
-<body>
-<h1>Course: {{ course.name }}</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Course: {{ course.name }}</h1>
 {% if lecture %}
     <h2>Lecture: {{ lecture.title }}</h2>
     <div>
@@ -13,5 +9,13 @@
         <h3>Description: {{ lecture.description }}</h3>
     </div>
 {% endif %}
-</body>
-</html>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}
+

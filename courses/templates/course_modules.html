@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Modules</title>
-</head>
-<body>
-{% if modules %}
+{% extends 'base.html' %}
+
+{% block content %}
+  <body>
+    {% if modules %}
     <h4>Modules:</h4>
-{% endif %}
-{% for module in modules %}
+    {% endif %}
+    {% for module in modules %}
     <div>
     <h5>{{ module.name }}</h5>
     <p>{{ module.duration }}</p>
     </div>
-{% endfor %}
-</body>
-</html>
+    {% endfor %}
+
+    </body>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}
+
