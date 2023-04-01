@@ -10,7 +10,10 @@ def courses_index(request):
 
 
 def courses_search(request, name):
-    return HttpResponse(f"search {name}")
+    courses = Course.objects.filter(name=name)
+    if courses:
+        return render(request, 'courses.html', context={"courses": courses})
+    return HttpResponseNotFound("not found")
 
 
 def course_modules(request, id):
