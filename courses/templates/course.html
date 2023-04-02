@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+{% extends 'base.html' %}
+
+{% block content %}
 <body>
 <h1>Course: {{ course.name }}</h1>
 <h2>Category: {{ course.category.name }}</h2>
@@ -20,5 +17,12 @@
     <p>{{ module.duration }}</p>
     </div>
 {% endfor %}
-</body>
-</html>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}

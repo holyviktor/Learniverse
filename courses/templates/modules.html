@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Modules</title>
-</head>
+{% extends 'base.html' %}
+
+{% block content %}
 <h1>Course: {{ course.name }}</h1>
 {% if module %}
     <h2>Module: {{ module.name }}</h2>
@@ -19,4 +16,12 @@
         {% endfor %}
     </div>
 {% endif %}
-</html>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}
