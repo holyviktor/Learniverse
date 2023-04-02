@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from courses.models import Category, Course, Module, Lection, Test, Question, Answer
+from courses.models import Category, Course
 # Create your views here.
 def main_index(request):
     courses = Course.objects.filter()
@@ -8,4 +8,5 @@ def main_index(request):
 
 
 def main_about(request):
-    return HttpResponse("about")
+
+    return render(request, 'about.html')

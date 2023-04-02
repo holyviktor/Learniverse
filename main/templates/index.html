@@ -2,10 +2,10 @@
 
 {% block content %}
 
+
+<h2>Home</h2>
 {% if category %}
     <h2>Category: {{ category }}</h2>
-{% else  %}
-    <h2>Home</h2>
 {% endif %}
 {% for course in courses %}
     <h3>{{ course.name }}</h3>
