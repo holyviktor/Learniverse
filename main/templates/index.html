@@ -1,18 +1,91 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    /* Контейнер курсів */
+.course-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+}
 
+/* Список курсів */
+.course-list {
+  flex-basis: 15%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-<h2>Home</h2>
+.course-list li {
+  margin-bottom: 10px;
+}
+
+/* Колонки курсів */
+.course-columns {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.course-column {
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 30%;
+  margin: 1%;
+}
+
+.course-column h3 {
+  margin-top: 0;
+}
+
+.course-column p {
+  margin-bottom: 10px;
+}
+
+/* Посилання на курс */
+a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<h2>Learn online with top-rated courses!</h2>
 {% if category %}
     <h2>Category: {{ category }}</h2>
 {% endif %}
-{% for course in courses %}
-    <h3>{{ course.name }}</h3>
-    <h4>{{ course.category.name }}</h4>
-    <h4>{{ course.description }}</h4>
-    <h4>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</h4>
-{% endfor %}
+<div class="course-container">
+<!--    <ul class="course-list">-->
+<!--      {% for course in courses %}-->
+<!--        <li><a href="{% url 'course' course.id %}">{{ course.name }}</a></li>-->
+<!--      {% empty %}-->
+<!--        <li>На даний момент немає курсів.</li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+    <div class="course-columns">
+      {% for course in courses %}
+        <div class="course-column">
+          <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
+          <p>Category: {{ course.category.name }}</p>
+            <p>Description: {{ course.description }}</p>
+            <p>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
+          <p>Duration: {{ course.duration }}</p>
+        </div>
+      {% empty %}
+        <p>На даний момент немає курсів.</p>
+      {% endfor %}
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block header %}
