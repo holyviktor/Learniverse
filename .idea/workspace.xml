@@ -1,279 +1,243 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="7143d8ef-210b-4c2e-b5be-7e8205806733" name="Changes" comment="new commit" />
+    <list default="true" id="50e69a84-5adc-403b-85d3-7d7614c01217" name="Changes" comment="changed views and created templates in profile">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Learniverse.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Learniverse.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/profiles/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/profiles/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Python Script" />
         <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <excluded-from-favorite>
-      <branch-storage>
-        <map>
-          <entry type="REMOTE">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="origin/master" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </excluded-from-favorite>
-    <favorite-branches>
-      <branch-storage>
-        <map>
-          <entry type="LOCAL">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="Diana" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="DianaKr" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="HARD" />
+    <option name="RESET_MODE" value="MIXED" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="ProjectId" id="2MpuDa9WCOba5wNGXlupoTC1OIM" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2MnCh8Er17pWvurIk0deuMldBJf" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/Іванка/3 курс/2 семестр/Python/Learniverse",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
+  }
+}]]></component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\dnkru\PycharmProjects\Learniverse\courses\static\courses" />
-      <recent name="C:\Users\dnkru\PycharmProjects\Learniverse\courses\static" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Іванка\3 курс\2 семестр\Python\Learniverse\profiles\templates" />
+      <recent name="D:\Іванка\3 курс\2 семестр\Python\Learniverse\profiles" />
+      <recent name="D:\Іванка\3 курс\2 семестр\Python\Learniverse\main" />
+      <recent name="D:\Іванка\3 курс\2 семестр\Python\Learniverse\Django" />
     </key>
+  </component>
+  <component name="RunManager" selected="Django Server.Learniverse">
+    <configuration name="ьаьв1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Learniverse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Downloads/Telegram Desktop" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/Downloads/Telegram Desktop/ьаьв1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Learniverse" type="Python.DjangoServer" factoryName="Django server">
+      <module name="Learniverse" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="Django.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ьаьв1" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7143d8ef-210b-4c2e-b5be-7e8205806733" name="Changes" comment="" />
-      <created>1678476726146</created>
+      <changelist id="50e69a84-5adc-403b-85d3-7d7614c01217" name="Changes" comment="" />
+      <created>1678394076134</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1678476726146</updated>
+      <updated>1678394076134</updated>
+      <workItem from="1678394077435" duration="289000" />
+      <workItem from="1678472312600" duration="7237000" />
+      <workItem from="1678555774104" duration="72000" />
+      <workItem from="1679599605758" duration="2239000" />
+      <workItem from="1679934067130" duration="5995000" />
+      <workItem from="1680030178860" duration="485000" />
+      <workItem from="1680084236620" duration="9208000" />
+      <workItem from="1680102402249" duration="2424000" />
+      <workItem from="1680357919017" duration="1380000" />
+      <workItem from="1680372393549" duration="2593000" />
+      <workItem from="1680535542958" duration="58000" />
+      <workItem from="1682608640187" duration="1175000" />
     </task>
-    <task id="LOCAL-00001" summary="change in course modules">
-      <created>1680354788656</created>
+    <task id="LOCAL-00001" summary="teacher_student db">
+      <created>1678474971137</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1680354788656</updated>
+      <updated>1678474971137</updated>
     </task>
-    <task id="LOCAL-00002" summary="changed in course modules">
-      <created>1680356705576</created>
+    <task id="LOCAL-00002" summary="user_course">
+      <created>1678476317621</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1680356705576</updated>
+      <updated>1678476317621</updated>
     </task>
-    <task id="LOCAL-00003" summary="changed in course modules">
-      <created>1680357110476</created>
+    <task id="LOCAL-00003" summary="user_course">
+      <created>1678476592406</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1680357110476</updated>
+      <updated>1678476592406</updated>
     </task>
-    <task id="LOCAL-00004" summary="changed in modules">
-      <created>1680360459321</created>
+    <task id="LOCAL-00004" summary="change student">
+      <created>1678477211386</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1680360459321</updated>
+      <updated>1678477211386</updated>
     </task>
-    <task id="LOCAL-00005" summary="change of lecture in modules">
-      <created>1680361676110</created>
+    <task id="LOCAL-00005" summary="migrations2">
+      <created>1679936347794</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1680361676110</updated>
+      <updated>1679936347794</updated>
     </task>
-    <task id="LOCAL-00006" summary="changed courses">
-      <created>1680363100059</created>
+    <task id="LOCAL-00006" summary="changed urls and views in profiles">
+      <created>1679937657324</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1680363100059</updated>
+      <updated>1679937657324</updated>
     </task>
-    <task id="LOCAL-00007" summary="changed to search for courses by name">
-      <created>1680363522451</created>
+    <task id="LOCAL-00007" summary="changed views and created templates in profile">
+      <created>1680099221830</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1680363522451</updated>
+      <updated>1680099221830</updated>
     </task>
-    <task id="LOCAL-00008" summary="changed templates">
-      <created>1680367594561</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1680367594561</updated>
-    </task>
-    <task id="LOCAL-00009" summary="changes in templates">
-      <created>1680433795007</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1680433795007</updated>
-    </task>
-    <task id="LOCAL-00010" summary="changes in templates">
-      <created>1680434313725</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1680434313725</updated>
-    </task>
-    <task id="LOCAL-00011" summary="new commit">
-      <created>1680435111449</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1680435111449</updated>
-    </task>
-    <task id="LOCAL-00012" summary="new commit">
-      <created>1680436735667</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1680436735667</updated>
-    </task>
-    <task id="LOCAL-00013" summary="new commit">
-      <created>1680436984790</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1680436984790</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
-  <component name="UnknownFeatures">
-    <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
-        <entry key="737867f9-61fe-45fb-8688-8fde7dfbebee">
+        <entry key="MAIN">
           <value>
             <State>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
               <option name="FILTERS">
                 <map>
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="roots">
-                    <value>
-                      <list>
-                        <option value="$PROJECT_DIR$" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
                 </map>
               </option>
             </State>
-          </value>
-        </entry>
-        <entry key="9cc0b6c0-f02a-4feb-942d-d820bef6b01c">
-          <value>
-            <State>
-              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
-              <option name="FILTERS">
-                <map>
-                  <entry key="roots">
-                    <value>
-                      <list>
-                        <option value="$PROJECT_DIR$" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="737867f9-61fe-45fb-8688-8fde7dfbebee" value="TOOL_WINDOW" />
-        <entry key="9cc0b6c0-f02a-4feb-942d-d820bef6b01c" value="TOOL_WINDOW" />
-      </map>
-    </option>
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="Branch">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="Diana" />
-                </option>
-              </RecentGroup>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="HEAD" />
-                </option>
-              </RecentGroup>
-            </list>
-          </value>
-        </entry>
-        <entry key="User">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="*" />
-                </option>
-              </RecentGroup>
-            </list>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="change in course modules" />
-    <MESSAGE value="changed in course modules" />
-    <MESSAGE value="changed in modules" />
-    <MESSAGE value="change of lecture in modules" />
-    <MESSAGE value="changed courses" />
-    <MESSAGE value="changed to search for courses by name" />
-    <MESSAGE value="changed templates" />
-    <MESSAGE value="changes in templates" />
-    <MESSAGE value="new commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="new commit" />
+    <MESSAGE value="teacher_student db" />
+    <MESSAGE value="user_course" />
+    <MESSAGE value="change student" />
+    <MESSAGE value="migrations2" />
+    <MESSAGE value="changed urls and views in profiles" />
+    <MESSAGE value="changed views and created templates in profile" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed views and created templates in profile" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Learniverse$1.coverage" NAME="ьаьв1 Coverage Results" MODIFIED="1680372634958" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Downloads/Telegram Desktop" />
   </component>
 </project>
