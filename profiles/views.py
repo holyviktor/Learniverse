@@ -53,11 +53,11 @@ def user_courses(request):
 
 
 def user_course_id(request, id):
-    return courses_id(request,id)
+    return courses_id(request, id)
 
 
 def teacher_add_courses(request):
-    return HttpResponse("teacher_add_course")
+    return HttpResponse("teacher_add_course")  
 
 
 def teacher_delete_id(request, id):
