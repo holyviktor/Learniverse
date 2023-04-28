@@ -1,21 +1,22 @@
-import json
-
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from courses.models import Course, UserCourse
+from courses.models import  UserCourse
 from courses.views import courses_id
 from profiles.models import User
 
-from django.core.serializers import serialize
+from profiles.form import LoginForm
 
 
 # Create your views here.
 def profiles_index(request):
-    user = User.objects.get(id=1)
-    if user:
-        return render(request, 'user.html', context={"user": user})
-    return HttpResponse("profile")
+    try:
+        id = request.session.get("user_id")
+        user = User.objects.get(id=id)
+        if user:
+            return render(request, 'user.html', context={"user": user})
+    except User.DoesNotExist:
+        return HttpResponse("profile")
 
 
 def profiles_register(request):
@@ -23,23 +24,26 @@ def profiles_register(request):
 
 
 def profiles_login(request):
-    if request.method == 'GET':
-        return render(request, 'login.html')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            try:
+                user = User.objects.get(email=email, password=password)
+                request.session['user_id'] = user.id
+                print(user.name)
+                return redirect('profile')
+            except User.DoesNotExist:
+                print("bad")
+                form.add_error(None, 'Invalid username or password')
     else:
-        login = request.POST.get('login')
-        password = request.POST.get('password')
-
-        user = User.objects.get(email=login)
-        if user.password != password:
-            return HttpResponse("login")
-        else:
-            request.session['user'] = serialize("json", [user,])
-            return redirect('profile')
-# Create your views here.
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
 
 
 def profiles_logout(request):
-    request.session.delete('user')
+    del request.session['user_id']
     return redirect('main')
 
 
