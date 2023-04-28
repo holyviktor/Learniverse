@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<a href="/profile/logout">Вийти</a>
+<a class="nav-link" href="{% url 'logout' %}" style="color: #333333">Вийти</a>
 <h1>{{ user.name  }} {{ user.surname }}</h1>
 
 {% endblock %}
