@@ -1,24 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>Course: {{ course.name }}</h1>
 {% if test %}
     <h2>Test: {{ test.name }}</h2>
+<form action="" method="post">
+    {% csrf_token %}
     <div>
         {% for question in questions %}
             <div>{{ question.title }}</div>
             {% for answer in  question.answers.all %}
                 <div>
-                    <input type="radio" id="{{ answer.id }}" name="answer" value="{{ answer.title }}">
+                    <input type="radio" id="{{ answer.id }}" name="answer" value="{{ answer.id }}">
                     <label for="answer">{{ answer.title }}</label>
                 </div>
             {% endfor %}
         {% endfor %}
     </div>
+<button class="btn btn-primary" type="submit">Відправити</button>
+</form>
 {% endif %}
-</body>
-</html>
+
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}

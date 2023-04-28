@@ -79,6 +79,12 @@ a:hover {
             <p>Description: {{ course.description }}</p>
             <p>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
           <p>Duration: {{ course.duration }}</p>
+            <form method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">Зареєструватись</button>
+                <input type="hidden" value="{{course.id}}" name="course">
+            </form>
+
         </div>
       {% empty %}
         <p>На даний момент немає курсів.</p>
