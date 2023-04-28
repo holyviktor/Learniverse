@@ -7,6 +7,16 @@
 <h2>Description: {{ course.description }}</h2>
 <h4>Duration: {{ course.duration }}</h4>
 <h4>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</h4>
+<form method="post">
+    {% csrf_token %}
+    {% if show_enroll%}
+        <button class="btn btn-primary" type="submit">Зареєструватись</button>
+        <input type="hidden" value="{{course.id}}" name="course_enroll">
+    {% else %}
+        <button class="btn btn-primary" type="submit">Покинути</button>
+        <input type="hidden" value="{{course.id}}" name="course_delete">
+    {% endif %}
+</form>
 <br>
 {% if modules %}
     <h4>Modules:</h4>

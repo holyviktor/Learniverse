@@ -1,11 +1,54 @@
 from django.http import HttpResponse, Http404, HttpResponseNotFound
-from django.shortcuts import render
-from .models import Category, Course, Module, Lection, Test, Question, Answer
+from django.shortcuts import render, redirect
+from datetime import datetime
+
+from profiles.models import User
+from .form import EnrollForm, DeleteForm
+from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse
+
+
+def enroll_course(request):
+    form_enroll = EnrollForm(request.POST)
+    form_delete = DeleteForm(request.POST)
+    print("here?")
+    if form_enroll.is_valid():
+        if form_enroll.cleaned_data['course_enroll']:
+            print("enroll")
+            now = datetime.now()
+            course_id = form_enroll.cleaned_data['course_enroll']
+            user_id = request.session['user_id']
+            user = User.objects.get(id=user_id)
+
+            print(user.id)
+            course = Course.objects.get(id=course_id)
+            user_course = UserCourse.objects.filter(user_id=user, course_id=course)
+            if not user_course:
+                print(course.id)
+                print(now.strftime("%Y/%m/%d %H:%M:%S"))
+                a = UserCourse(date_start=now.strftime("%Y-%m-%d %H:%M"), user=user, course=course)
+                a.save()
+                return redirect('profile')
+    if form_delete.is_valid():
+        if form_delete.cleaned_data['course_delete']:
+            print("delete")
+            course_id = form_delete.cleaned_data['course_delete']
+            user_id = request.session['user_id']
+            user = User.objects.get(id=user_id)
+            print(user.id)
+            course = Course.objects.get(id=course_id)
+            user_course = UserCourse.objects.filter(user_id=user, course_id=course)
+            print(user_course)
+            if user_course:
+                user_course.delete()
+                return redirect('profile')
 
 
 # Create your views here.
 def courses_index(request):
     courses = Course.objects.filter()
+    if request.method == 'POST':
+        enroll_course(request)
+    # return render(request, 'login.html', {'form': form})
     return render(request, 'courses.html', context={"courses": courses})
 
 
@@ -36,10 +79,19 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 def courses_id(request, id):
     course = Course.objects.filter(id=id)
+    user_id = request.session['user_id']
+    if user_id:
+        show_enroll = True
+        user = User.objects.get(id=user_id)
+        user_course = UserCourse.objects.filter(user_id=user_id, course_id=id)
+        if user_course:
+            show_enroll = False
     print(course)
+    if request.method == 'POST':
+        enroll_course(request)
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
-        return render(request, 'course.html', context={"course": course[0], "modules": modules})
+        return render(request, 'course.html', context={"course": course[0], "modules": modules, "show_enroll":show_enroll})
     return HttpResponseNotFound("not found")
 
 
@@ -59,7 +111,8 @@ def courses_id_module_id(request, id, id_module):
     if module and course:
         lections = Lection.objects.filter(module_id=id_module)
         tests = Test.objects.filter(module_id=id_module)
-        return render(request, 'modules.html', context={"course":course[0], "module": module[0], "lections": lections, 'tests': tests})
+        return render(request, 'modules.html',
+                      context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests})
     return HttpResponseNotFound("not found")
 
 
@@ -74,9 +127,5 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         #     print(answer)
         # answers = Answer.objects.filter()
         return render(request, 'test.html',
-                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions':questions})
+                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions})
     return HttpResponseNotFound("not found")
-
-
-
-
