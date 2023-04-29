@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 
 from profiles.models import User
-from .form import EnrollForm, DeleteForm
+from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse
 
 
@@ -98,14 +98,16 @@ def courses_id(request, id):
 
     if request.method == 'POST':
         enroll_course(request)
+    show_enroll = True
     if user_id:
-        show_enroll = True
         user_course = UserCourse.objects.filter(user_id=user_id, course_id=id)
         if user_course:
             show_enroll = False
+
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
-        return render(request, 'course.html', context={"course": course[0], "modules": modules, "show_enroll":show_enroll})
+        return render(request, 'course.html', context={"course": course[0], "modules": modules,
+                                                       "show_enroll": show_enroll})
     return HttpResponseNotFound("not found")
 
 
@@ -131,6 +133,26 @@ def courses_id_module_id(request, id, id_module):
 
 
 def courses_id_module_id_test(request, id, id_module, id_test):
+    if request.method == 'POST':
+        form_test = TestForm(request.POST)
+        user_answers = {}
+        if form_test.is_valid():
+            print("here!")
+            mark = 0
+            questions = Question.objects.filter(test_id=id_test)
+            print(questions)
+            for question in questions:
+                if str(question.id) in form_test.data:
+                    user_answers[question.id] = form_test.data[str(question.id)]
+                    answer = Answer.objects.filter(id=int(form_test.data[str(question.id)]))[0]
+                    print(answer.title)
+                    print(answer.correctness)
+                    if answer.correctness:
+                        mark+=1
+
+            return HttpResponse(f"Your mark is {mark}/{len(user_answers)}")
+
+
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
