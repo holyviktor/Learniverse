@@ -72,7 +72,7 @@ a:hover {
       {% endfor %}
     </ul>
     <div class="course-columns">
-      {% for course in courses %}
+      {% for course, show_enroll in courses.items %}
         <div class="course-column">
           <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
           <p>Category: {{ course.category.name }}</p>
@@ -81,10 +81,14 @@ a:hover {
           <p>Duration: {{ course.duration }}</p>
             <form method="post">
                 {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Зареєструватись</button>
-                <input type="hidden" value="{{course.id}}" name="course">
+                {% if show_enroll%}
+                    <button class="btn btn-primary" type="submit">Зареєструватись</button>
+                    <input type="hidden" value="{{course.id}}" name="course_enroll">
+                {% else %}
+                    <button class="btn btn-primary" type="submit">Покинути</button>
+                    <input type="hidden" value="{{course.id}}" name="course_delete">
+                {% endif %}
             </form>
-
         </div>
       {% empty %}
         <p>На даний момент немає курсів.</p>
