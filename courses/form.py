@@ -1,6 +1,6 @@
 from django import forms
 
-from courses.models import UserCourse
+from courses.models import UserCourse, Answer, Question
 
 
 class EnrollForm(forms.Form):
@@ -19,5 +19,11 @@ class DeleteForm(forms.Form):
 
     course_delete = forms.CharField(widget=forms.HiddenInput(attrs={'name': "course_delete"}))
 
+
 class TestForm(forms.Form):
-    pass
+    class Meta:
+        model = Answer, Question
+        fields = 'answer'
+
+    answer = []
+

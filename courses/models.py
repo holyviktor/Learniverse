@@ -50,7 +50,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     title = models.CharField(max_length=50)
-    correctness = models.BooleanField(default=False)
+    correctness = models.BooleanField(default=0)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
 
 
