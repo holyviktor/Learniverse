@@ -27,7 +27,7 @@
   display: flex;
   flex-basis: 100%;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: space-between;
 }
 
 .course-column {
@@ -36,7 +36,7 @@
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 20px;
-  width: 30%;
+  width: 31%;
   margin: 1%;
 }
 
@@ -59,9 +59,9 @@ a:hover {
 }
 </style>
 
-<h2>Learn online with top-rated courses!</h2>
+<h2>Відкрийте для себе світ програмування разом з нами!</h2>
 {% if category %}
-    <h2>Category: {{ category }}</h2>
+    <h2>Категорія: {{ category }}</h2>
 {% endif %}
 <div class="course-container">
 <!--    <ul class="course-list">-->
@@ -75,10 +75,10 @@ a:hover {
       {% for course in courses %}
         <div class="course-column">
           <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
-          <p>Category: {{ course.category.name }}</p>
-            <p>Description: {{ course.description }}</p>
-            <p>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
-          <p>Duration: {{ course.duration }}</p>
+          <p>Категорія: {{ course.category.name }}</p>
+            <p>Опис: {{ course.description }}</p>
+            <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
+          <p>Тривалість: {{ course.duration }}</p>
         </div>
       {% empty %}
         <p>На даний момент немає курсів.</p>

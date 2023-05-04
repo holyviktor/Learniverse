@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Course: {{ course.name }}</h1>
+<h1>{{ course.name }}</h1>
+
 {% if module %}
-    <h2>Module: {{ module.name }}</h2>
+    <h2>Модуль: {{ module.name }}</h2>
     <div>
         <p>{{ module.duration }}</p>
-        <h3>Lections</h3>
+        <h3>Лекції модулю</h3>
         {% for lection in lections %}
-            <div>{{ lection.title }}</div>
+        <a class="nav-link" href="{% url 'lecture' course.id module.id lection.id %}"><h5>{{ lection.title }}</h5></a>
         {% endfor %}
-        <h3>Tests</h3>
+        <h3>Тестування</h3>
         {% for test in tests %}
             <div>{{ test.title }}</div>
         {% endfor %}
