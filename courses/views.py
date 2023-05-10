@@ -127,7 +127,7 @@ def courses_id_module_id(request, id, id_module):
     if module and course:
         lections = Lection.objects.filter(module_id=id_module)
         tests = Test.objects.filter(module_id=id_module)
-        return render(request, 'modules.html',
+        return render(request, 'module.html',
                       context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests})
     return HttpResponseNotFound("not found")
 

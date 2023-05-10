@@ -2,31 +2,36 @@
 
 {% block content %}
 <body>
-<h1>Course: {{ course.name }}</h1>
-<h2>Category: {{ course.category.name }}</h2>
-<h2>Description: {{ course.description }}</h2>
-<h4>Duration: {{ course.duration }}</h4>
-<h4>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</h4>
+<section>
+    <h1>{{ course.name }}</h1>
+    <p>Категорія: {{ course.category.name }}</p>
+    <p>Тривалість: {{ course.duration }}
+    <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
+    <p>{{ course.description }}</p>
+</section>
+<section>
+    {% if modules %}
+    <h2>Модулі курсу:</h2>
+    {% endif %}
+    {% for module in modules %}
+    <ul>
+        <li><h5>{{ module.name }}</h5></li>
+        <li><p>{{ module.duration }}</p></li>
+    </ul>
+    {% endfor %}
+    <a href="{% url 'modules' course.id %}">Усі модулі</a>
+</section>
 <form method="post">
     {% csrf_token %}
     {% if show_enroll%}
-        <button class="btn btn-primary" type="submit">Зареєструватись</button>
-        <input type="hidden" value="{{course.id}}" name="course_enroll">
+    <button class="btn btn-primary" type="submit">Зареєструватись</button>
+    <input type="hidden" value="{{course.id}}" name="course_enroll">
     {% else %}
-        <button class="btn btn-primary" type="submit">Покинути</button>
-        <input type="hidden" value="{{course.id}}" name="course_delete">
+    <button class="btn btn-primary" type="submit">Покинути</button>
+    <input type="hidden" value="{{course.id}}" name="course_delete">
     {% endif %}
 </form>
-<br>
-{% if modules %}
-    <h4>Modules:</h4>
-{% endif %}
-{% for module in modules %}
-    <div>
-    <h5>{{ module.name }}</h5>
-    <p>{{ module.duration }}</p>
-    </div>
-{% endfor %}
+
 {% endblock %}
 
 {% block header %}
@@ -34,5 +39,5 @@
 {% endblock %}
 
 {% block footer %}
-  {% include 'footer.html' %}
+{% include 'footer.html' %}
 {% endblock %}
