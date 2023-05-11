@@ -1,10 +1,12 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from datetime import datetime
 
 from profiles.models import User
+from profiles.views import student_check
 from .form import EnrollForm, DeleteForm, TestForm
-from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse
+from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
 
 
 def enroll_course(request):
@@ -17,7 +19,7 @@ def enroll_course(request):
             # print("enroll")
             now = datetime.now()
             course_id = form_enroll.cleaned_data['course_enroll']
-            user_id = request.session['user_id']
+            user_id = request.session.get('user_id')
             user = User.objects.get(id=user_id)
 
             # print(user.id)
@@ -34,7 +36,7 @@ def enroll_course(request):
 
             # print("delete")
             course_id = form_delete.cleaned_data['course_delete']
-            user_id = request.session['user_id']
+            user_id = request.session.get('user_id')
             user = User.objects.get(id=user_id)
             print(user.id)
             course = Course.objects.get(id=course_id)
@@ -49,9 +51,12 @@ def enroll_course(request):
 # Create your views here.
 def courses_index(request):
     courses = Course.objects.filter()
-    user_id = request.session['user_id']
+    user_id = request.session.get('user_id')
     if request.method == 'POST':
-        enroll_course(request)
+        if user_id:
+            enroll_course(request)
+        else:
+            return redirect('login')
     show_course_enroll = {}
     for course in courses:
         if user_id:
@@ -61,7 +66,7 @@ def courses_index(request):
             else:
                 show_course_enroll[course] = True
         else:
-            show_course_enroll[course] = False
+            show_course_enroll[course] = True
     print(show_course_enroll)
     # return render(request, 'login.html', {'form': form})
     return render(request, 'courses.html', context={"courses": show_course_enroll})
@@ -94,10 +99,13 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 def courses_id(request, id):
     course = Course.objects.filter(id=id)
-    user_id = request.session['user_id']
+    user_id = request.session.get('user_id')
 
     if request.method == 'POST':
-        enroll_course(request)
+        if user_id:
+            enroll_course(request)
+        else:
+            return redirect('login')
     show_enroll = True
     if user_id:
         user_course = UserCourse.objects.filter(user_id=user_id, course_id=id)
@@ -132,12 +140,21 @@ def courses_id_module_id(request, id, id_module):
     return HttpResponseNotFound("not found")
 
 
+# @login_required
+# @user_passes_test(student_check)
 def courses_id_module_id_test(request, id, id_module, id_test):
+    user_id = request.session.get('user_id')
+    if user_id:
+        user_test = UserTest.objects.filter(test_id=id_test, user_id=user_id)
+        if user_test:
+            user_test = user_test[0]
+            return HttpResponse(f"Ви вже проходили цей тест. Ваша оцінка: {user_test.grade}%.")
     if request.method == 'POST':
+        count_questions = Question.objects.filter(test_id=id_test).count()
         form_test = TestForm(request.POST)
         user_answers = {}
         if form_test.is_valid():
-            print("here!")
+            # print("here!")
             mark = 0
             questions = Question.objects.filter(test_id=id_test)
             print(questions)
@@ -145,23 +162,20 @@ def courses_id_module_id_test(request, id, id_module, id_test):
                 if str(question.id) in form_test.data:
                     user_answers[question.id] = form_test.data[str(question.id)]
                     answer = Answer.objects.filter(id=int(form_test.data[str(question.id)]))[0]
-                    print(answer.title)
-                    print(answer.correctness)
+                    # print(answer.title)
+                    # print(answer.correctness)
                     if answer.correctness:
-                        mark+=1
-
-            return HttpResponse(f"Your mark is {mark}/{len(user_answers)}")
-
+                        mark += 1
+            grade = mark / count_questions * 100
+            member = UserTest(grade=grade, test_id=id_test, user_id=user_id)
+            member.save()
+            return HttpResponse(f"Your mark is {mark}/{count_questions}")
 
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
         tests = Test.objects.filter(module_id=id_module, id=id_test)
         questions = Question.objects.filter(test_id=id_test)
-        # for question in questions:
-        #     answer = question.answers.all()
-        #     print(answer)
-        # answers = Answer.objects.filter()
         return render(request, 'test.html',
                       context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions})
     return HttpResponseNotFound("not found")

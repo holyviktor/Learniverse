@@ -2,10 +2,11 @@
 
 {% block content %}
 <h1>Courses</h1>
-{% for course in courses %}
+{% for course, pass in courses %}
     <h3>{{ course.course.name }}</h3>
     <h4>{{ course.course.category.name }}</h4>
     <h4>{{ course.course.description }}</h4>
+    <h5>Проходження: {{ pass }}%</h5>
     <hr>
 {% endfor %}
 {% endblock %}
