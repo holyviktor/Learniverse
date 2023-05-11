@@ -17,7 +17,7 @@ def enroll_course(request):
             # print("enroll")
             now = datetime.now()
             course_id = form_enroll.cleaned_data['course_enroll']
-            user_id = request.session['user_id']
+            user_id = request.session.get('user_id')
             user = User.objects.get(id=user_id)
 
             # print(user.id)
@@ -34,7 +34,7 @@ def enroll_course(request):
 
             # print("delete")
             course_id = form_delete.cleaned_data['course_delete']
-            user_id = request.session['user_id']
+            user_id = request.session.get('user_id')
             user = User.objects.get(id=user_id)
             print(user.id)
             course = Course.objects.get(id=course_id)
@@ -49,9 +49,12 @@ def enroll_course(request):
 # Create your views here.
 def courses_index(request):
     courses = Course.objects.filter()
-    user_id = request.session['user_id']
+    user_id = request.session.get('user_id')
     if request.method == 'POST':
-        enroll_course(request)
+        if user_id:
+            enroll_course(request)
+        else:
+            return redirect('login')
     show_course_enroll = {}
     for course in courses:
         if user_id:
@@ -61,7 +64,7 @@ def courses_index(request):
             else:
                 show_course_enroll[course] = True
         else:
-            show_course_enroll[course] = False
+            show_course_enroll[course] = True
     print(show_course_enroll)
     # return render(request, 'login.html', {'form': form})
     return render(request, 'courses.html', context={"courses": show_course_enroll})
@@ -94,10 +97,13 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 def courses_id(request, id):
     course = Course.objects.filter(id=id)
-    user_id = request.session['user_id']
+    user_id = request.session.get('user_id')
 
     if request.method == 'POST':
-        enroll_course(request)
+        if user_id:
+            enroll_course(request)
+        else:
+            return redirect('login')
     show_enroll = True
     if user_id:
         user_course = UserCourse.objects.filter(user_id=user_id, course_id=id)
