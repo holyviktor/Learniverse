@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <style>
   body {
@@ -74,23 +74,29 @@ text-decoration: none;
 .courses ul li a:hover {
 text-decoration: underline;
 }
-
-
-
-
+.prof-out{
+justify-content: space-between;
+width:50vw;
+padding:2%;
+}
 
 </style>
-<a class="nav-link" href="{% url 'logout' %}" style="color: #333333">Вийти</a>
+
 
 <section class="profile">
     <div class="profile-image">
-        <img src="profile.jpg" alt="Фото профілю">
+        <img src="{% static 'img/user.png' %}" alt="Фото профілю">
     </div>
     <div class="profile-info">
-        <h1>{{ user.name }} {{ user.surname }}</h1>
-        <p>Електронна пошта: user@example.com</p>
-        <p>Кількість курсів: 3</p>
-        <p>Прогрес: 50%</p>
+        <div class="prof-out row justify-content">
+            <h1 class="">{{ user.name }} {{ user.surname }}</h1>
+        <a class="nav-link" href="{% url 'logout' %}" style="color: #333333">Вийти</a>
+        </div>
+        <div>
+        <p>Електронна пошта: {{ user.email }}</p>
+        <p>Номер телефону: {{ user.phone_number }}</p>
+        <p>Номер телефону: {{ user.date_birth }}</p>
+            </div>
     </div>
 </section>
 <section class="courses">
