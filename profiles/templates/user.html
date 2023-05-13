@@ -95,23 +95,25 @@ padding:2%;
         <div>
         <p>Електронна пошта: {{ user.email }}</p>
         <p>Номер телефону: {{ user.phone_number }}</p>
-        <p>Номер телефону: {{ user.date_birth }}</p>
+        <p>Дата народження: {{ user.date_birth }}</p>
             </div>
     </div>
 </section>
 <section class="courses">
     <h2>Мої курси</h2>
     <ul>
-        <li><a href="#">Назва курсу 1</a></li>
-        <li><a href="#">Назва курсу 2</a></li>
-        <li><a href="#">Назва курсу 3</a></li>
+        {% for course, pass in courses %}
+        <li><a href="{% url 'course' course.course.id %}">{{ course.course.name }}</a>
+            <span>{{ pass }}%</span></li>
+{% endfor %}
+
     </ul>
+    <a href="{% url 'profile_courses' %}">Усі мої курси</a>
 </section>
 <section class="profile-info">
     <h2>Мій прогрес</h2>
-    <p>Пройдено курсів: 2</p>
-    <p>Загальний прогрес: 50%</p>
-    <p>Останній пройдений курс: Назва курсу 2</p>
+    <p>Пройдено курсів: {{ count }}</p>
+    <p>Загальний прогрес: {{ result }}%</p>
 </section>
 
 {% endblock %}

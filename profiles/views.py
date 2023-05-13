@@ -27,13 +27,24 @@ def count_course_pass(user_id, course_id):
 # @login_required
 # Create your views here.
 def profiles_index(request):
-    print("here i am")
+    # print("here i am")
+    user_id = request.session.get("user_id")
+    print(user_id)
+    # user_id = 1
+
     try:
         id = request.session.get("user_id")
         user = User.objects.get(id=id)
         if user:
-            print("hereeeeeeeeee")
-            return render(request, 'user.html', context={"user": user})
+            courses = UserCourse.objects.filter(user_id=user_id)
+            courses_pass = []
+
+            for course in courses:
+                courses_pass.append(count_course_pass(user_id, course.course_id))
+        count = len(courses)
+        result = round(sum(courses_pass) / count, 2)
+        return render(request, 'user.html',
+                      context={"user": user, "count": count, "result": result, "courses": zip(courses, courses_pass)})
     except User.DoesNotExist:
         return HttpResponse("profile")
 
