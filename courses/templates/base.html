@@ -4,11 +4,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="../static/courses/css/style.css">
-  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-  <!-- підключення скриптів Bootstrap -->
-  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="../static/courses/css/style.css">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <!-- підключення скриптів Bootstrap -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
 <style>
 body {
@@ -59,21 +59,52 @@ header {
   margin: 0 auto;
   padding: 20px;
   }
+
+
+
 </style>
 <body>
-    <header class="header">
-      <div class="container">
-        {% block header %}{% endblock %}
-      </div>
-    </header>
+<header class="header">
     <div class="container">
-      {% block content %}{% endblock %}
+        <!--        {% block header %}-->
+
+        <!--          {% endblock %}-->
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="{% url 'main' %}">Learniverse</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main' %}">Головна</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses' %}">Курси</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">Про нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Профіль</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <footer class="footer">
-      <div class="container">
-        {% block footer %}{% endblock %}
-      </div>
-    </footer>
-  </body>
+</header>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+<footer class="footer">
+    <!--      <div class="container">-->
+    <!--        {% block footer %}{% endblock %}-->
+    <!--      </div>-->
+    <div class="container text-center">
+        <p>&copy; 2023 Learniverse</p>
+    </div>
+</footer>
+</body>
 </html>
 

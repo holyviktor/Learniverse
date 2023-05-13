@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
 from courses.models import UserCourse, Test, Module, UserTest, Course
 from profiles.models import User
 
@@ -46,13 +45,13 @@ def profiles_index(request):
         return render(request, 'user.html',
                       context={"user": user, "count": count, "result": result, "courses": zip(courses, courses_pass)})
     except User.DoesNotExist:
-        return HttpResponse("profile")
+        return redirect('login')
 
 
 def profiles_register(request):
     return HttpResponse('register')
 
-
+# @login_required
 def profiles_login(request):
     print(request.session.get('user_id'))
     if request.method == 'POST':

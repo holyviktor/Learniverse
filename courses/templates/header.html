@@ -16,6 +16,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'about' %}">Про нас</a>
                 </li>
+                {{ user.id }}
                 <li class="nav-item">
                     {% if user.id %}
                      <a class="nav-link" href="{% url 'profile' %}">Профіль</a>
