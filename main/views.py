@@ -8,5 +8,4 @@ def main_index(request):
 
 
 def main_about(request):
-
     return render(request, 'about.html')

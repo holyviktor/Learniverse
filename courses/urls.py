@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:id>/module/<int:id_module>', views.courses_id_module_id, name="module"), #
     path('<int:id>/module/<int:id_module>/lecture/<int:id_lecture>', views.courses_id_module_id_lecture, name="lecture"),
     path('<int:id>/module/<int:id_module>/test/<int:id_test>', views.courses_id_module_id_test),#
+    path('video',views.video)
 ]

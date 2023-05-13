@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 
 from profiles.models import User
+from courses.models import Video
 from profiles.views import student_check
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
@@ -179,3 +180,8 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         return render(request, 'test.html',
                       context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions})
     return HttpResponseNotFound("not found")
+
+
+def video(request):
+    videos = Video.objects.filter()
+    return render(request, 'vid.html', context={"videos": videos})

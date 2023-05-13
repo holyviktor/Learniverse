@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'profiles.apps.ProfilesConfig',
     'bootstrap4',
+    'embed_video',
+
 ]
 
 MIDDLEWARE = [

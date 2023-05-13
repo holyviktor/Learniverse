@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
     {% load static %}
+{% load embed_video_tags %}
 {% block content %}
 <style>
     .videoContainer {
@@ -17,28 +18,16 @@ video {
   <h1>{{ course.name }}</h1>
 {% if lecture %}
     <h2>Лекція: {{ lecture.title }}</h2>
-    <div>
-<!--        <h3>Відео: {{ lecture.video }}</h3>-->
-        <div class="page-header header-filter purple-filter" data-parallax="true"
-    style="background-image: url('{% static 'img/img.png' %}'); transform: translate3d(0px, 0px, 0px);">
-    <div id="videoContainer">
-        <video playsinline="" autoplay="autoplay" loop="loop" muted="muted" preload="auto">
-            <source src="http://ip-адрес/static/img/video.mp4" type="video/mp4">
-            <source src="http://ip-адрес/static/img/video.webm" type="video/webm">
-        </video>
-    </div>
+{% video lecture.video %}
       <div class="container">
          <div class="row">
           <div class="col-md-8 ml-auto mr-auto">
             <div class="brand text-center">
-              <h1>Відео</h1>
             </div>
           </div>
         </div>
       </div>
-    </div>
         <h3>Опис: {{ lecture.description }}</h3>
-    </div>
 {% endif %}
 {% endblock %}
 

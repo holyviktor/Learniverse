@@ -1,5 +1,5 @@
 from django.db import models
-
+from embed_video.fields import EmbedVideoField
 from profiles.models import User
 
 
@@ -65,3 +65,7 @@ class UserTest(models.Model):
     grade = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tests')
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='users')
+
+class Video(models.Model):
+    title = models.CharField(max_length=200)
+    video = EmbedVideoField()

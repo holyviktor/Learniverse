@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load embed_video_tags %}
+{% block content %}
+
+
+<div class="course-container">
+    <p>ggg</p>
+
+{% for video in videos %}
+  <h2>{{ video.title }}</h2>
+  {% video video.video %}
+{% endfor %}
+  </div>
+{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
+{% endblock %}
