@@ -1,17 +1,120 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+
+nav ul {
+list-style: none;
+margin: 0;
+padding: 0;
+text-align: right;
+}
+
+nav ul li {
+display: inline-block;
+}
+
+nav ul li a {
+color: #fff;
+display: block;
+padding: 10px;
+text-decoration: none;
+}
+
+nav ul li a:hover {
+background-color: #555;
+}
+
+main {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+}
+
+.profile {
+display: flex;
+flex-wrap: wrap;
+margin-bottom: 20px;
+}
+
+.profile-image {
+flex: 0 0 200px;
+margin-right: 20px;
+}
+
+.profile-image img {
+width: 100%;
+}
+
+.profile-info h1 {
+margin-top: 0;
+}
+
+.courses ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.courses ul li {
+margin-bottom: 10px;
+}
+
+.courses ul li a {
+color: #333;
+text-decoration: none;
+}
+
+.courses ul li a:hover {
+text-decoration: underline;
+}
+
+
+
+
+
+</style>
 <a class="nav-link" href="{% url 'logout' %}" style="color: #333333">Вийти</a>
-<h1>{{ user.name  }} {{ user.surname }}</h1>
+
+<section class="profile">
+    <div class="profile-image">
+        <img src="profile.jpg" alt="Фото профілю">
+    </div>
+    <div class="profile-info">
+        <h1>{{ user.name }} {{ user.surname }}</h1>
+        <p>Електронна пошта: user@example.com</p>
+        <p>Кількість курсів: 3</p>
+        <p>Прогрес: 50%</p>
+    </div>
+</section>
+<section class="courses">
+    <h2>Мої курси</h2>
+    <ul>
+        <li><a href="#">Назва курсу 1</a></li>
+        <li><a href="#">Назва курсу 2</a></li>
+        <li><a href="#">Назва курсу 3</a></li>
+    </ul>
+</section>
+<section class="profile-info">
+    <h2>Мій прогрес</h2>
+    <p>Пройдено курсів: 2</p>
+    <p>Загальний прогрес: 50%</p>
+    <p>Останній пройдений курс: Назва курсу 2</p>
+</section>
 
 {% endblock %}
 
 {% block header %}
-  {% include 'header.html' %}
+{% include 'header.html' %}
 {% endblock %}
 
 {% block footer %}
-  {% include 'footer.html' %}
+{% include 'footer.html' %}
 {% endblock %}
 
