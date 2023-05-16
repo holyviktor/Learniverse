@@ -61,16 +61,20 @@ a:hover {
 {% if category %}
     <h2>Категорія: {{ category }}</h2>
 {% else  %}
-    <h2>Курси</h2>
+    <h2>Категорії</h2>
 {% endif %}
 <div class="course-container">
+<form>
     <ul class="course-list">
-      {% for course in courses %}
-        <li><a href="{% url 'course' course.id %}">{{ course.name }}</a></li>
+      {% for category in categories %}
+        <li>
+            <button type="submit" name="category" value="{{ category.id }}">{{ category.name }}</button>
+        </li>
       {% empty %}
         <li>На даний момент немає курсів.</li>
       {% endfor %}
     </ul>
+</form>
     <div class="course-columns">
       {% for course, show_enroll in courses.items %}
         <div class="course-column">

@@ -51,6 +51,11 @@ def enroll_course(request):
 
 # Create your views here.
 def courses_index(request):
+    categories = Category.objects.select_related()
+    if request.GET.get('category'):
+        courses = Course.objects.filter(category_id=request.GET.get('category'))
+        if not courses:
+            raise Http404
     courses = Course.objects.filter()
     user_id = request.session.get('user_id')
     if request.method == 'POST':
@@ -70,7 +75,7 @@ def courses_index(request):
             show_course_enroll[course] = True
     print(show_course_enroll)
     # return render(request, 'login.html', {'form': form})
-    return render(request, 'courses.html', context={"courses": show_course_enroll})
+    return render(request, 'courses.html', context={"courses": show_course_enroll, "categories": categories})
 
 
 def courses_search(request, name):
