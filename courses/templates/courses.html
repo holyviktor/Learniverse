@@ -64,8 +64,11 @@ a:hover {
     <h2>Категорії</h2>
 {% endif %}
 <div class="course-container">
-<form>
+<div>
+    <form>
+
     <ul class="course-list">
+
       {% for category in categories %}
         <li>
             <button type="submit" name="category" value="{{ category.id }}">{{ category.name }}</button>
@@ -73,9 +76,17 @@ a:hover {
       {% empty %}
         <li>На даний момент немає курсів.</li>
       {% endfor %}
+
+
     </ul>
-</form>
+    </form>
+</div>
+
+<div>
     <div class="course-columns">
+        <form action="">
+            <input type="text" name="search" value="{{ search }}" placeholder="Пошук">
+        </form>
       {% for course, show_enroll in courses.items %}
         <div class="course-column">
           <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
@@ -98,6 +109,7 @@ a:hover {
         <p>На даний момент немає курсів.</p>
       {% endfor %}
     </div>
+</div>
   </div>
 <!--{% for course in courses %}-->
 <!--    <h3>{{ course.name }}</h3>-->

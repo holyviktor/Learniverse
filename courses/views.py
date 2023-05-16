@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
@@ -52,11 +54,24 @@ def enroll_course(request):
 # Create your views here.
 def courses_index(request):
     categories = Category.objects.select_related()
+    courses = Course.objects.filter()
     if request.GET.get('category'):
         courses = Course.objects.filter(category_id=request.GET.get('category'))
         if not courses:
             raise Http404
-    courses = Course.objects.filter()
+    if request.GET.get('search'):
+        courses = Course.objects.none()
+        search_text = request.GET.get('search')
+        categories_search = Category.objects.filter(name__icontains=search_text)
+        for category_search in categories_search:
+            course_search = Course.objects.filter(category_id=category_search.id)
+            if course_search:
+                courses = chain(course_search, courses)
+        courses_search_name = Course.objects.filter(name__icontains=search_text)
+        courses_search_descr = Course.objects.filter(description__icontains=search_text)
+        courses = chain(courses_search_name, courses_search_descr, courses)
+
+    print(courses)
     user_id = request.session.get('user_id')
     if request.method == 'POST':
         if user_id:
