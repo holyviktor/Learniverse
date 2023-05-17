@@ -1,7 +1,8 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
 
-class User(models.Model):
+class User(AbstractBaseUser):
     name = models.CharField(max_length=40)
     surname = models.CharField(max_length=40)
     email = models.EmailField(max_length=100, unique=True)
@@ -10,6 +11,8 @@ class User(models.Model):
     phone_number = models.CharField(max_length=20)
     role = models.CharField(max_length=10)
     description = models.TextField(max_length=500)
+
+    USERNAME_FIELD = "email"
 
 
 
