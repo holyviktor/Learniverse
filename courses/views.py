@@ -22,8 +22,9 @@ def enroll_course(request):
             # print("enroll")
             now = datetime.now()
             course_id = form_enroll.cleaned_data['course_enroll']
-            user_id = request.session.get('user_id')
-            user = User.objects.get(id=user_id)
+            user = request.user
+            # user_id = request.session.get('user_id')
+            # user = User.objects.get(id=user_id)
 
             # print(user.id)
             course = Course.objects.get(id=course_id)
@@ -39,8 +40,9 @@ def enroll_course(request):
 
             # print("delete")
             course_id = form_delete.cleaned_data['course_delete']
-            user_id = request.session.get('user_id')
-            user = User.objects.get(id=user_id)
+            user = request.user
+            # user_id = request.session.get('user_id')
+            # user = User.objects.get(id=user_id)
             print(user.id)
             course = Course.objects.get(id=course_id)
             user_course = UserCourse.objects.filter(user_id=user, course_id=course)
@@ -72,16 +74,17 @@ def courses_index(request):
         courses = chain(courses_search_name, courses_search_descr, courses)
 
     print(courses)
-    user_id = request.session.get('user_id')
+    user = request.user
+    # user_id = request.session.get('user_id')
     if request.method == 'POST':
-        if user_id:
+        if user.is_authenticated:
             enroll_course(request)
         else:
             return redirect('login')
     show_course_enroll = {}
     for course in courses:
-        if user_id:
-            user_course = UserCourse.objects.filter(user_id=user_id, course_id=course.id)
+        if user.is_authenticated:
+            user_course = UserCourse.objects.filter(user_id=user.id, course_id=course.id)
             if user_course:
                 show_course_enroll[course] = False
             else:
@@ -120,16 +123,17 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 def courses_id(request, id):
     course = Course.objects.filter(id=id)
-    user_id = request.session.get('user_id')
+    user = request.user
+    # user_id = request.session.get('user_id')
 
     if request.method == 'POST':
-        if user_id:
+        if user.is_authenticated:
             enroll_course(request)
         else:
             return redirect('login')
     show_enroll = True
-    if user_id:
-        user_course = UserCourse.objects.filter(user_id=user_id, course_id=id)
+    if user.is_authenticated:
+        user_course = UserCourse.objects.filter(user_id=user.id, course_id=id)
         if user_course:
             show_enroll = False
 
@@ -164,9 +168,10 @@ def courses_id_module_id(request, id, id_module):
 # @login_required
 # @user_passes_test(student_check)
 def courses_id_module_id_test(request, id, id_module, id_test):
-    user_id = request.session.get('user_id')
-    if user_id:
-        user_test = UserTest.objects.filter(test_id=id_test, user_id=user_id)
+    user = request.user
+    # user_id = request.session.get('user_id')
+    if user.is_authenticated:
+        user_test = UserTest.objects.filter(test_id=id_test, user_id=user.id)
         if user_test:
             user_test = user_test[0]
             return HttpResponse(f"Ви вже проходили цей тест. Ваша оцінка: {user_test.grade}%.")
@@ -188,7 +193,7 @@ def courses_id_module_id_test(request, id, id_module, id_test):
                     if answer.correctness:
                         mark += 1
             grade = mark / count_questions * 100
-            member = UserTest(grade=grade, test_id=id_test, user_id=user_id)
+            member = UserTest(grade=grade, test_id=id_test, user_id=user.id)
             member.save()
             return HttpResponse(f"Your mark is {mark}/{count_questions}")
 

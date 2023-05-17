@@ -13,6 +13,7 @@ urlpatterns = [
     path('course/<int:id_course>', views.user_course_id, name="user_course"),
     path('add_course', views.teacher_add_courses),
     path('delete_course/<int:id_course>', views.teacher_delete_id),
+    path('add_course_to_wish_list', views.add_course_to_wishlist),
     path('wishlist', views.student_wishlist)
 ]
 
