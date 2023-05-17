@@ -104,6 +104,16 @@ a:hover {
                     <input type="hidden" value="{{course.id}}" name="course_delete">
                 {% endif %}
             </form>
+        <form method="post" action="{% url 'like' %}">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">Like</button>
+            <input type="hidden" value="{{course.id}}" name="id">
+        </form>
+        <form method="post" action="{% url 'dislike' %}">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">DisLike</button>
+            <input type="hidden" value="{{course.id}}" name="id">
+        </form>
         </div>
       {% empty %}
         <p>На даний момент немає курсів.</p>
