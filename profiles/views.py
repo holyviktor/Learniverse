@@ -5,7 +5,7 @@ from courses.models import UserCourse, Test, Module, UserTest, Course
 from profiles.models import User
 from django.contrib.auth import login, authenticate, logout
 
-from profiles.form import LoginForm
+from profiles.form import LoginForm, SignUpForm
 
 
 def count_course_pass(user_id, course_id):
@@ -55,7 +55,20 @@ def profiles_index(request):
 
 
 def profiles_register(request):
-    return HttpResponse('register')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        print(111)
+        if form.is_valid():
+            print(222)
+            user = form.save()
+            print(333)
+            login(request, user)
+            print(user)
+            return redirect('profile')
+        print(form.errors)
+    else:
+        form = SignUpForm()
+        return render(request, 'sign_up.html', {'form': form})
 
 
 # @login_required
@@ -133,30 +146,57 @@ def teacher_delete_id(request, id):
 
 
 def student_wishlist(request):
-    wishlist = request.COOKIES['wishlist']
     courses = []
-    for i in wishlist:
-        courses.append(Course.objects.get(id=i))
+    if 'wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['wishlist_user']
+        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
 
-    response = render(request, 'usercourses.html', context={"courses": courses})
+        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+        wishlist = list(map(int, wishlist))
+        for i in wishlist:
+            print(i)
+            courses.append(Course.objects.get(id=i))
+    response = render(request, 'wishlist.html', context={"courses": courses})
     return response
 
 
-def add_course_to_wishlist(request, id):
+def add_course_to_wishlist(request):
+
     previous_page = request.META.get('HTTP_REFERER')
-    wishlist = request.COOKIES['wishlist']
-    wishlist.append(id)
+    if 'wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['wishlist_user']
+        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
+
+        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+        wishlist = list(map(int, wishlist))
+    else:
+        wishlist = []
+    wishlist.append(request.POST['id'])
+
     response = HttpResponseRedirect(previous_page)
-    response.set_cookie('wishlist', wishlist)
+
+    serialized_list = ','.join(map(str, wishlist))
+    response.set_cookie('wishlist_user', serialized_list)
 
     return response
 
 
-def del_course_to_wishlist(request, id):
+def del_course_to_wishlist(request):
     previous_page = request.META.get('HTTP_REFERER')
-    wishlist = request.COOKIES['wishlist']
-    wishlist.remove(id)
-    response = HttpResponseRedirect(previous_page)
-    response.set_cookie('wishlist', wishlist)
+    if 'wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['wishlist_user']
+        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
 
+        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+        wishlist = list(map(int, wishlist))
+    else:
+        wishlist = []
+    print(wishlist)
+    print(int(request.POST['id']))
+    wishlist.remove(int(request.POST['id']))
+
+    response = HttpResponseRedirect(previous_page)
+
+    serialized_list = ','.join(map(str, wishlist))
+    response.set_cookie('wishlist_user', serialized_list)
     return response

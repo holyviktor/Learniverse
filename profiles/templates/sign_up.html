@@ -55,21 +55,45 @@ button[type="submit"]:hover {
 
 </style>
 <form method="post" class="login-form">
-    <h2>Увійти</h2>
+    <h2>Зареєструватись</h2>
     <div class="form-group">
          {% csrf_token %}
         <div>
-            <label class="form-label" for="resEmail">Email</label>
+            <label class="form-label" for="signUpName">Name</label>
+            <div class="border rounded">{{ form.name }}</div>
+        </div>
+        <div>
+            <label class="form-label" for="signUpSurname">Surname</label>
+            <div class="border rounded">{{ form.surname }}</div>
+        </div>
+        <div>
+            <label class="form-label" for="signUpDateBirth">Date birth</label>
+            <div class="border rounded">{{ form.date_birth }}</div>
+        </div>
+        <div>
+            <label class="form-label" for="signUpPhoneNumber">Phone number</label>
+            <div class="border rounded">{{ form.phone_number }}</div>
+        </div>
+        <div>
+            <div>
+            <label class="form-label" for="signUpEmail">Email</label>
             <div class="border rounded">{{ form.email }}</div>
         </div>
         <div>
-            <label class="form-label" for="resPassword">Password</label>
+            <label class="form-label" for="signUpPassword">Password</label>
             <div class="border rounded">{{ form.password }}</div>
         </div>
+        <div>
+            <label class="form-label" for="signUpDescription">Description</label>
+            <div class="border rounded">{{ form.description }}</div>
+        </div>
+        <div>
+            <label class="form-label" for="signUpRole">Are you teacher?</label>
+            {{ form.role }}
+        </div>
     </div>
-    <button type="submit">Увійти</button>
+    <button type="submit">Зареєструватись</button>
 </form>
-    <a href="{% url 'sign_up' %}" >Зареєструватись</a>
 
 
 {% endblock %}
