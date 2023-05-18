@@ -104,14 +104,14 @@ a:hover {
                     <input type="hidden" value="{{course.id}}" name="course_delete">
                 {% endif %}
             </form>
+
         <form method="post" action="{% url 'like' %}">
             {% csrf_token %}
+            {% if course.id in wishlist %}
+            <button class="btn btn-primary" type="submit">Dislike</button>
+            {% else %}
             <button class="btn btn-primary" type="submit">Like</button>
-            <input type="hidden" value="{{course.id}}" name="id">
-        </form>
-        <form method="post" action="{% url 'dislike' %}">
-            {% csrf_token %}
-            <button class="btn btn-primary" type="submit">DisLike</button>
+            {% endif %}
             <input type="hidden" value="{{course.id}}" name="id">
         </form>
         </div>

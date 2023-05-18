@@ -13,10 +13,12 @@
         {% endfor %}
         <h3>Тестування</h3>
         {% for test in tests %}
-            <div>{{ test.title }}</div>
+{#            <div>{{ test.title }}</div>#}
+            <a href="{% url 'test' course.id module.id test.id %}">{{ test.title }}</a>
         {% endfor %}
     </div>
 {% endif %}
+
 {% endblock %}
 
 {% block header %}

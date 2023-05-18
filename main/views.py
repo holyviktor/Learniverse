@@ -7,8 +7,8 @@ from courses.models import Category, Course, User
 
 def main_index(request):
     courses = Course.objects.filter()
-    return render(request, 'index.html', context={"courses": courses})
+    return render(request, 'index.html', context={"courses": courses, 'user': request.user})
 
 
 def main_about(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', context={'user': request.user})

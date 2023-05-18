@@ -4,8 +4,9 @@
 
 <h1>Course: {{ course.name }}</h1>
 {% if test %}
+    <div id="timer">60</div>
     <h2>Test: {{ test.name }}</h2>
-<form action="" method="post">
+<form action="" method="post" id="myForm">
     {% csrf_token %}
     <div>
         {% for question in questions %}
@@ -25,7 +26,25 @@
 <button class="btn btn-primary" type="submit">Відправити</button>
 </form>
 {% endif %}
+<script>
+// Функція, яка зменшує таймер і автоматично надсилає форму
+  function countdown() {
+    var timerElement = document.getElementById("timer");
+    var seconds = parseInt(timerElement.innerText);
+    if (seconds > 0) {
+      seconds--;
+      timerElement.innerText = seconds;
+      setTimeout(countdown, 1000); // Оновлення таймера кожну секунду (1000 мілісекунд)
+    } else {
+      document.getElementById("myForm").submit();
+    }
+  }
 
+  // Запускаємо таймер після завантаження сторінки
+  window.onload = function() {
+    setTimeout(countdown, 1000); // Початкове запуск таймера
+  };
+</script>
 {% endblock %}
 
 {% block header %}

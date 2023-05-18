@@ -54,6 +54,15 @@ button[type="submit"]:hover {
 }
 
 </style>
+    {% if errors %}
+  <ul class="errorlist">
+    {% for field, error_list in errors.items %}
+      {% for error in error_list %}
+        <li>{{ field }}: {{ error.message }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+{% endif %}
 <form method="post" class="login-form">
     <h2>Зареєструватись</h2>
     <div class="form-group">
