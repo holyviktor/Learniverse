@@ -7,9 +7,10 @@ from datetime import datetime
 
 from profiles.models import User
 from courses.models import Video
-from profiles.views import student_check
+from profiles.views import student_check, get_wishlist
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
+
 
 
 def enroll_course(request):
@@ -93,13 +94,14 @@ def courses_index(request):
             show_course_enroll[course] = True
     print(show_course_enroll)
     # return render(request, 'login.html', {'form': form})
-    return render(request, 'courses.html', context={"courses": show_course_enroll, "categories": categories})
+    wishlist = get_wishlist(request)
+    return render(request, 'courses.html', context={"courses": show_course_enroll, "categories": categories,  "wishlist": wishlist, 'user': request.user})
 
 
 def courses_search(request, name):
     courses = Course.objects.filter(name=name)
     if courses:
-        return render(request, 'courses.html', context={"courses": courses})
+        return render(request, 'courses.html', context={"courses": courses, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -107,7 +109,7 @@ def course_modules(request, id):
     course = Course.objects.filter(id=id)
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
-        return render(request, 'course_modules.html', context={"course": course[0], "modules": modules})
+        return render(request, 'course_modules.html', context={"course": course[0], "modules": modules, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -117,7 +119,7 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
     if module and course:
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
         return render(request, 'lecture.html',
-                      context={"course": course[0], "module": module[0], 'lecture': lectures[0]})
+                      context={"course": course[0], "module": module[0], 'lecture': lectures[0], 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -140,7 +142,7 @@ def courses_id(request, id):
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
-                                                       "show_enroll": show_enroll})
+                                                       "show_enroll": show_enroll, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -150,7 +152,7 @@ def courses_category(request, name):
         category_id = category.first().id
         courses_by_category = Course.objects.filter(category_id=category_id)
         if courses_by_category is not None:
-            return render(request, 'courses.html', context={"courses": courses_by_category, 'category': name})
+            return render(request, 'courses.html', context={"courses": courses_by_category, 'category': name, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -161,7 +163,7 @@ def courses_id_module_id(request, id, id_module):
         lections = Lection.objects.filter(module_id=id_module)
         tests = Test.objects.filter(module_id=id_module)
         return render(request, 'module.html',
-                      context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests})
+                      context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -203,10 +205,12 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         tests = Test.objects.filter(module_id=id_module, id=id_test)
         questions = Question.objects.filter(test_id=id_test)
         return render(request, 'test.html',
-                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions})
+                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
 def video(request):
     videos = Video.objects.filter()
-    return render(request, 'vid.html', context={"videos": videos})
+    return render(request, 'vid.html', context={"videos": videos, 'user': request.user})
+
+

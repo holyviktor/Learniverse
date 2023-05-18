@@ -90,7 +90,11 @@ header {
                         <a class="nav-link" href="{% url 'wishlist' %}">Вподобані</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}">Профіль</a>
+                        {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'profile' %}">Вітаємо, {{ user.name }}</a>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'profile' %}">Увійти</a>
+                        {% endif %}
                     </li>
                 </ul>
             </div>

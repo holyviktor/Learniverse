@@ -6,6 +6,7 @@ from profiles.models import User
 from django.contrib.auth import login, authenticate, logout
 
 from profiles.form import LoginForm, SignUpForm
+from django.contrib.auth.hashers import check_password
 
 
 def count_course_pass(user_id, course_id):
@@ -33,7 +34,7 @@ def profiles_index(request):
     # user_id = 1
 
     user = request.user
-    print(user)
+
     # id = request.session.get("user_id")
     # user = User.objects.get(id=id)
     if user.is_authenticated:
@@ -42,7 +43,6 @@ def profiles_index(request):
         result = 0
 
         courses_pass = []
-        print(len(courses))
         if len(courses) != 0:
             for course in courses:
                 courses_pass.append(count_course_pass(user.id, course.course_id))
@@ -57,18 +57,16 @@ def profiles_index(request):
 def profiles_register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-        print(111)
         if form.is_valid():
-            print(222)
             user = form.save()
-            print(333)
             login(request, user)
-            print(user)
             return redirect('profile')
-        print(form.errors)
+        errors = form.errors.as_data()
+        return render(request, 'sign_up.html', {'form': form, 'errors': errors, 'user': request.user})
+
     else:
         form = SignUpForm()
-        return render(request, 'sign_up.html', {'form': form})
+        return render(request, 'sign_up.html', {'form': form, 'user': request.user})
 
 
 # @login_required
@@ -79,14 +77,17 @@ def profiles_login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
-                user = User.objects.get(email=email, password=password)
-                login(request, user)
-                return redirect('profile')
+                user = User.objects.get(email=email)
+                if check_password(password, user.password):
+                    login(request, user)
+                    return redirect('profile')
+                else:
+                    raise User.DoesNotExist
             except User.DoesNotExist:
                 form.add_error(None, 'Invalid username or password')
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': form, 'user': request.user})
 
 
 def profiles_logout(request):
@@ -96,7 +97,6 @@ def profiles_logout(request):
 
 
 def student_check(user):
-    print(user)
     if user.is_authenticated:
         return user.role == "student"
     else:
@@ -111,26 +111,21 @@ def user_courses(request):
     # print(user_id)
     # user_id = 1
     if user.is_authenticated:
-        # user = User.objects.get(id=1)
+
         courses = UserCourse.objects.filter(user_id=user.id)
         courses_pass = []
-        print(courses)
-        for course in courses:
-            # print(course.id)
-            # print(courses[course])
-            print(user.id)
-            print(course.course_id)
-            courses_pass.append(count_course_pass(user.id, course.course_id))
-        print(courses_pass)
-        # print(len(courses))
 
-        return render(request, 'usercourses.html', context={"courses": zip(courses, courses_pass)})
+        for course in courses:
+            courses_pass.append(count_course_pass(user.id, course.course_id))
+
+
+        return render(request, 'usercourses.html', context={"courses": zip(courses, courses_pass), 'user': request.user})
     return HttpResponse("teacher_courses")
 
 
 def user_course_id(request, id_course):
     user = request.user
-    # user_id = request.session.get('user_id')
+
     if user.is_authenticated and Course.objects.filter(id=id_course):
         print(user.id, id_course)
         count = count_course_pass(user.id, id_course)
@@ -141,62 +136,55 @@ def teacher_add_courses(request):
     return HttpResponse("teacher_add_course")
 
 
-def teacher_delete_id(request, id):
+def teacher_delete_id(request):
     return HttpResponse("teacher_delete_id")
 
 
 def student_wishlist(request):
     courses = []
-    if 'wishlist_user' in request.COOKIES:
-        cookie = request.COOKIES['wishlist_user']
-        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
-
-        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+    if 'Wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['Wishlist_user']
+        wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
         for i in wishlist:
-            print(i)
+
             courses.append(Course.objects.get(id=i))
-    response = render(request, 'wishlist.html', context={"courses": courses})
+    response = render(request, 'wishlist.html', context={"courses": courses, 'user': request.user})
     return response
 
 
-def add_course_to_wishlist(request):
-
+def change_wishlist(request):
     previous_page = request.META.get('HTTP_REFERER')
-    if 'wishlist_user' in request.COOKIES:
-        cookie = request.COOKIES['wishlist_user']
-        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
-
-        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+    response = HttpResponseRedirect(previous_page)
+    if 'Wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['Wishlist_user']
+        wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
     else:
         wishlist = []
-    wishlist.append(request.POST['id'])
+    if int(request.POST['id']) not in wishlist:
+        wishlist.append(int(request.POST['id']))
+    else:
 
-    response = HttpResponseRedirect(previous_page)
+        if len(wishlist) != 1:
+
+            wishlist.remove(int(request.POST['id']))
+        else:
+
+            response.delete_cookie('Wishlist_user')
+            return response
 
     serialized_list = ','.join(map(str, wishlist))
-    response.set_cookie('wishlist_user', serialized_list)
 
+    response.set_cookie('Wishlist_user', serialized_list)
     return response
 
 
-def del_course_to_wishlist(request):
-    previous_page = request.META.get('HTTP_REFERER')
-    if 'wishlist_user' in request.COOKIES:
-        cookie = request.COOKIES['wishlist_user']
-        wishlist = cookie.split(',')  # Розділяємо рядок за комами, отримуємо список рядків
-
-        # Перетворюємо елементи списку назад на числа або інші типи даних, якщо необхідно
+def get_wishlist(request):
+    if 'Wishlist_user' in request.COOKIES:
+        cookie = request.COOKIES['Wishlist_user']
+        wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
     else:
         wishlist = []
-    print(wishlist)
-    print(int(request.POST['id']))
-    wishlist.remove(int(request.POST['id']))
-
-    response = HttpResponseRedirect(previous_page)
-
-    serialized_list = ','.join(map(str, wishlist))
-    response.set_cookie('wishlist_user', serialized_list)
-    return response
+    return wishlist

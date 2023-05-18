@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.hashers import make_password
 
 from profiles.models import User
 
@@ -56,7 +57,7 @@ class SignUpForm(forms.Form):
         user.surname = self.cleaned_data['surname']
         user.email = self.cleaned_data['email']
         user.date_birth = self.cleaned_data['date_birth']
-        user.password = self.cleaned_data['password']
+        user.password = make_password(self.cleaned_data['password'])
         user.phone_number = self.cleaned_data['phone_number']
         user.description = self.cleaned_data['description']
         if self.cleaned_data['role']:
