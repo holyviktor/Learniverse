@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -25,8 +26,7 @@ def count_course_pass(user_id, course_id):
     return user_tests_count / test_course_count * 100
 
 
-# @login_required
-# Create your views here.
+@login_required(login_url='login')
 def profiles_index(request):
     # print("here i am")
     # user_id = request.session.get("user_id")
@@ -103,13 +103,10 @@ def student_check(user):
         return False
 
 
-# @login_required(login_url='login')
-# @user_passes_test(student_check)
+@login_required(login_url='login')
+@user_passes_test(student_check)
 def user_courses(request):
     user = request.user
-    # user_id = request.session.get("user_id")
-    # print(user_id)
-    # user_id = 1
     if user.is_authenticated:
 
         courses = UserCourse.objects.filter(user_id=user.id)
@@ -117,12 +114,12 @@ def user_courses(request):
 
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
-
-
         return render(request, 'usercourses.html', context={"courses": zip(courses, courses_pass), 'user': request.user})
     return HttpResponse("teacher_courses")
 
 
+@login_required(login_url='login')
+@user_passes_test(student_check)
 def user_course_id(request, id_course):
     user = request.user
 

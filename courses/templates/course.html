@@ -19,7 +19,9 @@
         <li><p>{{ module.duration }}</p></li>
     </ul>
     {% endfor %}
-    <a href="{% url 'modules' course.id %}">Усі модулі</a>
+    {% if show_btn_modules  %}
+        <a href="{% url 'modules' course.id %}">Усі модулі</a>
+    {% endif %}
 </section>
 <form method="post">
     {% csrf_token %}

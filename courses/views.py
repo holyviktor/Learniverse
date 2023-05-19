@@ -12,6 +12,10 @@ from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
 
 
+def if_user_has_course(user_id, course_id):
+    user_course = UserCourse.objects.filter(user_id=user_id, course_id=course_id)
+    return user_course.exists()
+
 
 def enroll_course(request):
     form_enroll = EnrollForm(request.POST)
@@ -105,7 +109,12 @@ def courses_search(request, name):
     return HttpResponseNotFound("not found")
 
 
+@login_required
+@user_passes_test(student_check)
 def course_modules(request, id):
+    user = request.user
+    if not if_user_has_course(user.id, id):
+        return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
@@ -113,7 +122,12 @@ def course_modules(request, id):
     return HttpResponseNotFound("not found")
 
 
+@login_required
+@user_passes_test(student_check)
 def courses_id_module_id_lecture(request, id, id_module, id_lecture):
+    user = request.user
+    if not if_user_has_course(user.id, id):
+        return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
@@ -124,6 +138,7 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 
 def courses_id(request, id):
+    show_btn_modules = False
     course = Course.objects.filter(id=id)
     user = request.user
     # user_id = request.session.get('user_id')
@@ -138,11 +153,14 @@ def courses_id(request, id):
         user_course = UserCourse.objects.filter(user_id=user.id, course_id=id)
         if user_course:
             show_enroll = False
-
+    user = request.user
+    if user and if_user_has_course(user.id, id):
+        show_btn_modules = True
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
-                                                       "show_enroll": show_enroll, 'user': request.user})
+                                                       "show_enroll": show_enroll, 'user': request.user,
+                                                       "show_btn_modules":show_btn_modules})
     return HttpResponseNotFound("not found")
 
 
@@ -156,7 +174,12 @@ def courses_category(request, name):
     return HttpResponseNotFound("not found")
 
 
+@login_required
+@user_passes_test(student_check)
 def courses_id_module_id(request, id, id_module):
+    user = request.user
+    if not if_user_has_course(user.id, id):
+        return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
@@ -167,10 +190,12 @@ def courses_id_module_id(request, id, id_module):
     return HttpResponseNotFound("not found")
 
 
-# @login_required
-# @user_passes_test(student_check)
+@login_required
+@user_passes_test(student_check)
 def courses_id_module_id_test(request, id, id_module, id_test):
     user = request.user
+    if not if_user_has_course(user.id, id):
+        return HttpResponseNotFound("not found")
     # user_id = request.session.get('user_id')
     if user.is_authenticated:
         user_test = UserTest.objects.filter(test_id=id_test, user_id=user.id)
