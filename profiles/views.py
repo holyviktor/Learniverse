@@ -14,14 +14,12 @@ from django.contrib.auth.hashers import check_password
 
 def count_course_mark(user_id, course_id):
     course = Course.objects.filter(id=course_id).first()
-    user_tests = UserTest.objects.none()
     count_tests = 0
     total_mark = 0
     for module in course.modules.all():
+        count_tests += Test.objects.filter(module_id=module.id).count()
         for test in module.tests.all():
             user_test = UserTest.objects.filter(user_id=user_id, test_id=test.id)
-            count_tests += user_test.count()
-            user_tests = chain(user_test, user_tests)
             for user_test_module in user_test:
                 total_mark += user_test_module.grade
     total_mark = total_mark/count_tests
