@@ -21,7 +21,7 @@ class LoginForm(forms.Form):
 class SignUpForm(forms.Form):
     class Meta:
         model = User
-        fields = ('name', 'surname', 'email', 'date_birth', 'password', 'phone_number', 'description', 'role')
+        fields = ('name', 'surname', 'email', 'date_birth', 'password', 'phone_number', 'description')
 
     name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
         'class': "form-control shadow-0 px-0 border-0 border-bottom",
@@ -46,10 +46,10 @@ class SignUpForm(forms.Form):
         'class': "form-control shadow-0 px-0 border-0 border-bottom",
         'id': "signUpDescription", 'type': "text", 'name': "sign_up_description", 'required': ""}))
 
-    role = forms.BooleanField(widget=forms.CheckboxInput(attrs={
-        'class': 'my-checkbox-class',
-        'id': "signUpRole", 'type': "text", 'name': "sign_up_role", 'required': ""
-    }))
+    # role = forms.BooleanField(widget=forms.CheckboxInput(attrs={
+    #     'class': 'my-checkbox-class',
+    #     'id': "signUpRole", 'type': "text", 'name': "sign_up_role", 'required': ""
+    # }))
 
     def save(self):
         user = User()
@@ -60,10 +60,11 @@ class SignUpForm(forms.Form):
         user.password = make_password(self.cleaned_data['password'])
         user.phone_number = self.cleaned_data['phone_number']
         user.description = self.cleaned_data['description']
-        if self.cleaned_data['role']:
-            user.role = 'teacher'
-        else:
-            user.role = 'user'
+        user.role = "student"
+        # if self.cleaned_data['role']:
+        #     user.role = 'teacher'
+        # else:
+        #     user.role = 'user'
         user.save()
         return user
 
