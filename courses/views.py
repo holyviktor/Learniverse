@@ -7,7 +7,7 @@ from datetime import datetime
 
 from profiles.models import User
 from courses.models import Video
-from profiles.views import student_check, get_wishlist
+from profiles.views import student_check, get_wishlist, rating_course
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
 
@@ -137,6 +137,7 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 
 def courses_id(request, id):
+    rating_course(id)
     show_btn_modules = False
     course = Course.objects.filter(id=id)
     user = request.user
