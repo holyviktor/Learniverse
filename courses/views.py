@@ -58,7 +58,6 @@ def enroll_course(request):
                 # return redirect('profile')
 
 
-# Create your views here.
 def courses_index(request):
     categories = Category.objects.select_related()
     courses = Course.objects.filter()
