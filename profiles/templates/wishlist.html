@@ -1,18 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {%  for course in courses %}
-        <div>{{ course.name }}</div>
+<style>
+    h1 {
+  color: #333;
+}
+
+.course-list {
+  list-style: none;
+  padding: 0;
+}
+
+.course-list li {
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+</style>
+<h1>Мої уподобані курси</h1>
+
+  <ul class="course-list">
+    {% for course in courses %}
+
+      <li>
+        <h2>{{ course.name }}</h2>
+        <p>{{ course.description }}</p>
+        <a href="{% url 'course' course.id %}">Перейти до курсу</a>
+      </li>
+    {% empty %}
+      <li>Наразі ви не маєте жодного уподобаного курсу.</li>
     {% endfor %}
+  </ul>
 <div></div>
 
 
-{% endblock %}
-
-{% block header %}
-{% include 'header.html' %}
-{% endblock %}
-
-{% block footer %}
-{% include 'footer.html' %}
 {% endblock %}

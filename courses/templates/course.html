@@ -8,6 +8,27 @@
     <p>Тривалість: {{ course.duration }}
     <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
     <p>{{ course.description }}</p>
+    <div class="row">
+        <form class="col-md-1 mb-1" method="post" action="{% url 'like' %}">
+            {% csrf_token %}
+            {% if course.id in wishlist %}
+            <button class="btn btn-primary" type="submit">Dislike</button>
+            {% else %}
+            <button class="btn btn-primary" type="submit">Like</button>
+            {% endif %}
+            <input type="hidden" value="{{course.id}}" name="id">
+        </form>
+        <form class="col" method="post">
+            {% csrf_token %}
+            {% if show_enroll%}
+            <button class="btn btn-primary" type="submit">Зареєструватись</button>
+            <input type="hidden" value="{{course.id}}" name="course_enroll">
+            {% else %}
+            <button class="btn btn-primary" type="submit">Покинути</button>
+            <input type="hidden" value="{{course.id}}" name="course_delete">
+            {% endif %}
+        </form>
+    </div>
 </section>
 <section>
     {% if modules %}
@@ -19,25 +40,16 @@
         <li><p>{{ module.duration }}</p></li>
     </ul>
     {% endfor %}
-    {% if show_btn_modules  %}
-        <a href="{% url 'modules' course.id %}">Усі модулі</a>
+    {% if show_btn_modules %}
+    <a href="{% url 'modules' course.id %}">Усі модулі</a>
     {% endif %}
 </section>
-<form method="post">
-    {% csrf_token %}
-    {% if show_enroll%}
-    <button class="btn btn-primary" type="submit">Зареєструватись</button>
-    <input type="hidden" value="{{course.id}}" name="course_enroll">
-    {% else %}
-    <button class="btn btn-primary" type="submit">Покинути</button>
-    <input type="hidden" value="{{course.id}}" name="course_delete">
-    {% endif %}
-</form>
+
 
 {% endblock %}
 
 {% block header %}
-  {% include 'header.html' %}
+{% include 'header.html' %}
 {% endblock %}
 
 {% block footer %}
