@@ -11,6 +11,12 @@ from django.contrib.auth import login, authenticate, logout
 from profiles.form import LoginForm, SignUpForm
 from django.contrib.auth.hashers import check_password
 
+from django.http import HttpResponse
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 def count_course_mark(user_id, course_id):
     course = Course.objects.filter(id=course_id).first()
@@ -22,7 +28,7 @@ def count_course_mark(user_id, course_id):
             user_test = UserTest.objects.filter(user_id=user_id, test_id=test.id)
             for user_test_module in user_test:
                 total_mark += user_test_module.grade
-    total_mark = total_mark/count_tests
+    total_mark = total_mark / count_tests
     return total_mark
 
 
@@ -101,7 +107,6 @@ def profiles_register(request):
 
 # @login_required
 def profiles_login(request):
-
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -145,7 +150,8 @@ def user_courses(request):
 
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
-        return render(request, 'usercourses.html', context={"courses": zip(courses, courses_pass), 'user': request.user})
+        return render(request, 'usercourses.html',
+                      context={"courses": zip(courses, courses_pass), 'user': request.user})
     return HttpResponse("teacher_courses")
 
 
@@ -176,7 +182,6 @@ def student_wishlist(request):
         wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
         for i in wishlist:
-
             courses.append(Course.objects.get(id=i))
     response = render(request, 'wishlist.html', context={"courses": courses, 'user': request.user})
     return response
@@ -217,3 +222,30 @@ def get_wishlist(request):
     else:
         wishlist = []
     return wishlist
+
+
+def generate_certificate(request):
+    participant_name = "John Doe"  # Замініть на реальне ім'я учасника
+
+    # Генерація сертифіката у форматі PDF
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+
+    p.setFont("Helvetica", 24)
+    p.drawString(100, 700, "certificate")
+    p.setFont("Helvetica", 16)
+    p.drawString(100, 650, "Цей сертифікат видається")
+    p.setFont("Helvetica", 20)
+    p.drawString(100, 600, "за успішне проходження курсу Django")
+    p.setFont("Helvetica", 24)
+    p.drawString(100, 500, participant_name)
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+
+    return response

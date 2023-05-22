@@ -3,7 +3,6 @@ from django.urls import path, include
 
 from profiles import views
 
-
 urlpatterns = [
     path('', views.profiles_index, name="profile"),
     path('register', views.profiles_register, name="sign_up"),
@@ -15,6 +14,6 @@ urlpatterns = [
     path('delete_course/<int:id_course>', views.teacher_delete_id),
     path('change_wish_list', views.change_wishlist, name="like"),
     # path('delete_course_to_wish_list', views.del_course_to_wishlist, name="dislike"),
-    path('wishlist', views.student_wishlist, name='wishlist')
+    path('wishlist', views.student_wishlist, name='wishlist'),
+    path('certificate', views.generate_certificate, name='generate_certificate')
 ]
-

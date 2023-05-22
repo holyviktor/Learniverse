@@ -28,22 +28,46 @@ a {
   text-decoration: none;
 }
 
+
 </style>
 <h1>Мої уподобані курси</h1>
 
-  <ul class="course-list">
+<ul class="course-list">
     {% for course in courses %}
 
-      <li>
+    <li>
         <h2>{{ course.name }}</h2>
         <p>{{ course.description }}</p>
-        <a href="{% url 'course' course.id %}">Перейти до курсу</a>
-      </li>
+        <a href="{% url 'course' course.id %}">Детальніше про курс</a>
+        <div class="row">
+            <form class="col-md-1" method="post" action="{% url 'like' %}">
+                {% csrf_token %}
+                {% if course.id in wishlist %}
+                <button class="btn btn-primary" type="submit">Dislike</button>
+                {% else %}
+                <button class="btn btn-primary" type="submit">Like</button>
+                {% endif %}
+                <input type="hidden" value="{{course.id}}" name="id">
+            </form>
+            <form class="col" method="post">
+                {% csrf_token %}
+                {% if show_enroll%}
+                <button class="btn btn-primary" type="submit">Зареєструватись</button>
+                <input type="hidden" value="{{course.id}}" name="course_enroll">
+                {% else %}
+                <button class="btn btn-primary" type="submit">Покинути</button>
+                <input type="hidden" value="{{course.id}}" name="course_delete">
+                {% endif %}
+            </form>
+        </div>
+    </li>
     {% empty %}
-      <li>Наразі ви не маєте жодного уподобаного курсу.</li>
+    <li>Наразі ви не маєте жодного уподобаного курсу.</li>
     {% endfor %}
-  </ul>
+</ul>
 <div></div>
 
 
 {% endblock %}
+
+

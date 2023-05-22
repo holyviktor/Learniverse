@@ -68,19 +68,19 @@ button[type="submit"]:hover {
     <div class="form-group">
          {% csrf_token %}
         <div>
-            <label class="form-label" for="signUpName">Name</label>
+            <label class="form-label" for="signUpName">Ім'я</label>
             <div class="border rounded">{{ form.name }}</div>
         </div>
         <div>
-            <label class="form-label" for="signUpSurname">Surname</label>
+            <label class="form-label" for="signUpSurname">Прізвище</label>
             <div class="border rounded">{{ form.surname }}</div>
         </div>
         <div>
-            <label class="form-label" for="signUpDateBirth">Date birth</label>
+            <label class="form-label" for="signUpDateBirth">Дата народження</label>
             <div class="border rounded">{{ form.date_birth }}</div>
         </div>
         <div>
-            <label class="form-label" for="signUpPhoneNumber">Phone number</label>
+            <label class="form-label" for="signUpPhoneNumber">Номер телефону</label>
             <div class="border rounded">{{ form.phone_number }}</div>
         </div>
         <div>
@@ -89,11 +89,11 @@ button[type="submit"]:hover {
             <div class="border rounded">{{ form.email }}</div>
         </div>
         <div>
-            <label class="form-label" for="signUpPassword">Password</label>
+            <label class="form-label" for="signUpPassword">Пароль</label>
             <div class="border rounded">{{ form.password }}</div>
         </div>
         <div>
-            <label class="form-label" for="signUpDescription">Description</label>
+            <label class="form-label" for="signUpDescription">Опис</label>
             <div class="border rounded">{{ form.description }}</div>
         </div>
     </div>
