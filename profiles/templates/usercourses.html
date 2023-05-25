@@ -1,13 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Courses</h1>
+<style>
+    h1 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    h5 {
+        color: #888;
+        font-size: 14px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 20px 0;
+    }
+
+</style>
+
+<h1>Мої курси</h1>
 {% for course, pass in courses %}
-    <h3>{{ course.course.name }}</h3>
-    <h4>{{ course.course.category.name }}</h4>
-    <h4>{{ course.course.description }}</h4>
-    <h5>Проходження: {{ pass }}%</h5>
-    <hr>
+<a href="{% url 'course' course.course.id %}"><h3>{{ course.course.name }}</h3></a>
+<h4>{{ course.course.category.name }}</h4>
+<h4>{{ course.course.description }}</h4>
+<h5>Проходження: {{ pass }}%</h5>
+<hr>
 {% endfor %}
 {% endblock %}
 

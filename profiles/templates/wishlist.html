@@ -2,61 +2,115 @@
 
 {% block content %}
 <style>
+    /* Стилі для контейнера сторінки */
+
+
+    /* Стилі для заголовка сторінки */
     h1 {
-  color: #333;
-}
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
 
-.course-list {
-  list-style: none;
-  padding: 0;
-}
+    /* Стилі для списку курсів */
+    .course-list {
+        list-style: none;
+        padding: 0;
+    }
 
-.course-list li {
-  margin-bottom: 20px;
-}
+    .course-list li {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
 
-h2 {
-  color: #333;
-}
+    /* Стилі для назви курсу */
+    h2 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
 
-p {
-  color: #666;
-}
+    /* Стилі для опису курсу */
+    p {
+        color: #666;
+        margin-bottom: 10px;
+    }
 
-a {
-  color: #0066cc;
-  text-decoration: none;
-}
+    /* Стилі для посилання "Детальніше про курс" */
+    a {
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    /* Стилі для кнопок "Like" і "Dislike" */
+    .like-btn {
+        background-color: #0066cc;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .dislike-btn {
+        background-color: #cc0000;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* Стилі для кнопок "Зареєструватись" і "Покинути" */
+    .enroll-btn,
+    .leave-btn {
+        background-color: #0066cc;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* Стилі для розташування елементів у рядку */
+    .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 
 
 </style>
+
 <h1>Мої уподобані курси</h1>
 
 <ul class="course-list">
     {% for course in courses %}
-
     <li>
-        <h2>{{ course.name }}</h2>
+        <a href="{% url 'course' course.id %}"><h2>{{ course.name }}</h2></a>
         <p>{{ course.description }}</p>
         <a href="{% url 'course' course.id %}">Детальніше про курс</a>
         <div class="row">
-            <form class="col-md-1" method="post" action="{% url 'like' %}">
+            <form method="post" style="margin-left: auto; margin-right:2px " action="{% url 'like' %}">
                 {% csrf_token %}
                 {% if course.id in wishlist %}
-                <button class="btn btn-primary" type="submit">Dislike</button>
+                <button class="like-btn" type="submit">Dislike</button>
                 {% else %}
-                <button class="btn btn-primary" type="submit">Like</button>
+                <button class="like-btn" type="submit">Like</button>
                 {% endif %}
-                <input type="hidden" value="{{course.id}}" name="id">
+                <input type="hidden" value="{{ course.id }}" name="id">
             </form>
-            <form class="col" method="post">
+            <form method="post">
                 {% csrf_token %}
-                {% if show_enroll%}
-                <button class="btn btn-primary" type="submit">Зареєструватись</button>
-                <input type="hidden" value="{{course.id}}" name="course_enroll">
+                {% if show_enroll %}
+                <button class="enroll-btn" type="submit">Зареєструватись</button>
+                <input type="hidden" value="{{ course.id }}" name="course_enroll">
                 {% else %}
-                <button class="btn btn-primary" type="submit">Покинути</button>
-                <input type="hidden" value="{{course.id}}" name="course_delete">
+                <button class="leave-btn" type="submit">Покинути</button>
+                <input type="hidden" value="{{ course.id }}" name="course_delete">
                 {% endif %}
             </form>
         </div>
@@ -65,9 +119,6 @@ a {
     <li>Наразі ви не маєте жодного уподобаного курсу.</li>
     {% endfor %}
 </ul>
-<div></div>
 
 
 {% endblock %}
-
-
