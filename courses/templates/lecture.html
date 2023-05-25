@@ -28,6 +28,9 @@ video {
         </div>
       </div>
         <h3>Опис: {{ lecture.description }}</h3>
+<a href="{% url 'lecture' course.id module.id lecture.id %}" class="btn btn-primary">
+  <button>Перейти до наступної лекції</button>
+</a>
 {% endif %}
 {% endblock %}
 

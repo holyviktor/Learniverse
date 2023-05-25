@@ -220,7 +220,9 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         user_test = UserTest.objects.filter(test_id=id_test, user_id=user.id)
         if user_test:
             user_test = user_test[0]
-            return HttpResponse(f"Ви вже проходили цей тест. Ваша оцінка: {user_test.grade}%.")
+            # return HttpResponse(f"Ви вже проходили цей тест. Ваша оцінка: {user_test.grade}%.")
+            return render(request, 'passed_test.html',
+                          context={"grade": user_test.grade})
     if request.method == 'POST':
         count_questions = Question.objects.filter(test_id=id_test).count()
         form_test = TestForm(request.POST)
@@ -241,7 +243,9 @@ def courses_id_module_id_test(request, id, id_module, id_test):
             grade = mark / count_questions * 100
             member = UserTest(grade=grade, test_id=id_test, user_id=user.id)
             member.save()
-            return HttpResponse(f"Your mark is {mark}/{count_questions}")
+            # return HttpResponse(f"Your mark is {mark}/{count_questions}")
+            return render(request, 'result_test.html',
+                          context={"mark": mark, "count_questions":count_questions})
 
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
@@ -264,7 +268,8 @@ def generate_certificate(request, id):
     course = Course.objects.filter(id=id)
     participant_name = str(user.name)+' '+str(user.surname)
 
-    font_path = os.path.join(settings.BASE_DIR, 'font', 'AlegreSans-Regular.ttf')
+    # font_path = os.path.join(settings.BASE_DIR, 'font', 'AlegreSans-Regular.ttf')
+    font_path="Helvetica"
     # Генерація сертифіката у форматі PDF
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
