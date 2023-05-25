@@ -146,20 +146,22 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
     prev_lecture = ''
     n_lec=id_lecture+1
     p_lec=id_lecture-1
-    if not if_user_has_course(user.id, id):
-        return HttpResponseNotFound("not found")
-    course = Course.objects.filter(id=id)
-    module = Module.objects.filter(id=id_module, course_id=id)
-    lections=Lection.objects.filter(module_id=id_module)
-    tests = Test.objects.filter(module_id=id_module)
     if Lection.objects.filter(module_id=id_module, id=n_lec):
         next_lecture = id_lecture + 1
     if Lection.objects.filter(module_id=id_module, id=p_lec):
         prev_lecture = id_lecture - 1
+    if not if_user_has_course(user.id, id):
+        return HttpResponseNotFound("not found")
+    course = Course.objects.filter(id=id)
+    module = Module.objects.filter(id=id_module, course_id=id)
+    modules=Module.objects.filter(course_id=id)
+    lections=Lection.objects.filter(module_id=id_module)
+    tests = Test.objects.filter(module_id=id_module)
+
     if module and course:
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
         return render(request, 'lecture.html',
-                      context={"course": course[0], "module": module[0], 'lections':lections, 'tests':tests,'lecture': lectures[0], 'user': request.user,'next_lecture':next_lecture,'prev_lecture':prev_lecture})
+                      context={"course": course[0], "module": module[0], 'lections':lections, 'tests':tests, 'modules':modules, 'lecture': lectures[0], 'user': request.user,'next_lecture':next_lecture,'prev_lecture':prev_lecture})
     return HttpResponseNotFound("not found")
 
 
@@ -206,6 +208,14 @@ def courses_category(request, name):
 @user_passes_test(student_check)
 def courses_id_module_id(request, id, id_module):
     user = request.user
+    next_mod = ''
+    prev_mod = ''
+    n_mod = id_module + 1
+    p_mod = id_module - 1
+    if Module.objects.filter(id=n_mod):
+        next_mod = id_module + 1
+    if Module.objects.filter(id=p_mod):
+        prev_mod = id_module - 1
     if not if_user_has_course(user.id, id):
         return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
@@ -215,7 +225,7 @@ def courses_id_module_id(request, id, id_module):
         tests = Test.objects.filter(module_id=id_module)
         return render(request, 'module.html',
                       context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests,
-                               'user': request.user})
+                               'user': request.user,'prev_mod':prev_mod,'next_mod':next_mod})
     return HttpResponseNotFound("not found")
 
 

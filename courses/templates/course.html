@@ -1,16 +1,108 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<body>
+<style>
+
+    h1 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    h5 {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+
+
+    .btn-primary {
+        background-color: #0066cc;
+    }
+
+    .btn-primary:hover {
+        background-color: #004499;
+    }
+
+    .row {
+        display: flex;
+        align-items: center;
+    }
+
+    .col {
+        flex: 1;
+        margin-left: 10px;
+    }
+
+
+
+    section {
+        margin-bottom: 30px;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 4px;
+    }
+    .button-row {
+        padding-left: 20px;
+        padding-right: 20px;
+        }
+    span {
+        margin-top:2px;
+        padding-top:2px;
+        font-size: 15px;
+    }
+ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+        padding-bottom: 10px;
+
+    }
+
+
+    section {
+        margin-bottom: 30px;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 4px;
+    }
+
+    .nav-link {
+        color: #0066cc;
+        text-decoration: none;
+    }
+
+    .nav-link:hover {
+        text-decoration: underline;
+    }
+
+
+</style>
 <section>
     <h1>{{ course.name }}</h1>
     <p>Категорія: {{ course.category.name }}</p>
     <p>Тривалість: {{ course.duration }}
     <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
     <p>{{ course.description }}</p>
-    <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
-    <div class="row">
-        <form class="col-md-1 mb-1" method="post" action="{% url 'like' %}">
+
+    <div class="row button-row">
+        <form method="post" action="{% url 'like' %}">
             {% csrf_token %}
             {% if course.id in wishlist %}
             <button class="btn btn-primary" type="submit">Dislike</button>
@@ -19,7 +111,7 @@
             {% endif %}
             <input type="hidden" value="{{course.id}}" name="id">
         </form>
-        <form class="col" method="post">
+        <form style="margin-right: auto; margin-left:2px " method="post">
             {% csrf_token %}
             {% if show_enroll%}
             <button class="btn btn-primary" type="submit">Зареєструватись</button>
@@ -29,16 +121,19 @@
             <input type="hidden" value="{{course.id}}" name="course_delete">
             {% endif %}
         </form>
+        <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
     </div>
 </section>
 <section>
     {% if modules %}
-    <h2>Модулі курсу:</h2>
+    <h2>Модулі курсу</h2>
     {% endif %}
     {% for module in modules %}
     <ul>
-        <li><h5>{{ module.name }}</h5></li>
-        <li><p>{{ module.duration }}</p></li>
+        <li>
+            <h5><a class="nav-link" href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h5>
+            <span>Тривалість: {{ module.duration }}</span>
+        </li>
     </ul>
     {% endfor %}
     {% if show_btn_modules %}

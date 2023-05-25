@@ -58,7 +58,8 @@
     <!-- Список модулів -->
     <div class="col-md-3">
         <div class="module-sidebar">
-            <h3>Модуль: <a href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h3>
+
+            <h3><a href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h3>
             <ul class="lecture-list">
                 {% for lection in lections %}
                 <li class="lecture-item">
@@ -97,9 +98,6 @@
                 Попередня лекція
             </a>
             {% endif %}
-            <a class="btn btn-primary">
-                {{ lecture.id }}
-            </a>
             {% if next_lecture %}
             <a href="{% url 'lecture' course.id module.id next_lecture %}" class="btn btn-primary">
                 Наступна лекція

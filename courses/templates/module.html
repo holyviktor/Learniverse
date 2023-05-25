@@ -13,10 +13,20 @@
         {% endfor %}
         <h3>Тестування</h3>
         {% for test in tests %}
-{#            <div>{{ test.title }}</div>#}
             <a href="{% url 'test' course.id module.id test.id %}">{{ test.title }}</a>
         {% endfor %}
     </div>
+{% if prev_mod %}
+            <a href="{% url 'module' course.id prev_mod %}" class="btn btn-primary">
+                Попередній модуль
+            </a>
+            {% endif %}
+
+            {% if next_mod %}
+            <a href="{% url 'module' course.id next_mod %}" class="btn btn-primary">
+                Наступний модуль
+            </a>
+            {% endif %}
 {% endif %}
 
 {% endblock %}

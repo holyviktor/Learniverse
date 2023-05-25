@@ -1,49 +1,93 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
 
-<h1>Course: {{ course.name }}</h1>
+    h1 {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    div#timer {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    form#myForm {
+        margin-top: 20px;
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 10px;
+    }
+
+    input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    label {
+        margin-right: 20px;
+    }
+
+    .btn-primary {
+        background-color: #0066cc;
+    }
+
+    .btn-primary:hover {
+        background-color: #004499;
+    }
+</style>
+
+<h1>Курс: {{ course.name }}</h1>
 {% if test %}
-    <div id="timer">60</div>
-    <h2>Test: {{ test.name }}</h2>
+<div id="timer">1060</div>
+<h2>Тест: {{ test.name }}</h2>
 <form action="" method="post" id="myForm">
     {% csrf_token %}
     <div>
         {% for question in questions %}
-            <div>{{ question.title }}</div>
+        <div>{{ question.title }}</div>
         <div>
             <fieldset id="{{ question.id }}">
-            {% for answer in  question.answers.all %}
+                {% for answer in question.answers.all %}
 
-                    <input type="radio" name="{{ question.id }}" id="{{ answer.id }}" value="{{ answer.id }}" required>
-                    <label for="{{ answer.id }}">{{ answer.title }}</label>
+                <input type="radio" name="{{ question.id }}" id="{{ answer.id }}" value="{{ answer.id }}" required>
+                <label for="{{ answer.id }}">{{ answer.title }}</label>
 
-            {% endfor %}
+                {% endfor %}
             </fieldset>
         </div>
         {% endfor %}
     </div>
-<button class="btn btn-primary" type="submit">Відправити</button>
+    <button class="btn btn-primary" type="submit">Відправити</button>
 </form>
 {% endif %}
 <script>
-// Функція, яка зменшує таймер і автоматично надсилає форму
-  function countdown() {
-    var timerElement = document.getElementById("timer");
-    var seconds = parseInt(timerElement.innerText);
-    if (seconds > 0) {
-      seconds--;
-      timerElement.innerText = seconds;
-      setTimeout(countdown, 1000); // Оновлення таймера кожну секунду (1000 мілісекунд)
-    } else {
-      document.getElementById("myForm").submit();
+    // Функція, яка зменшує таймер і автоматично надсилає форму
+    function countdown() {
+        var timerElement = document.getElementById("timer");
+        var seconds = parseInt(timerElement.innerText);
+        if (seconds > 0) {
+            seconds--;
+            timerElement.innerText = seconds;
+            setTimeout(countdown, 1000); // Оновлення таймера кожну секунду (1000 мілісекунд)
+        } else {
+            document.getElementById("myForm").submit();
+        }
     }
-  }
 
-  // Запускаємо таймер після завантаження сторінки
-  window.onload = function() {
-    setTimeout(countdown, 1000); // Початкове запуск таймера
-  };
+    // Запускаємо таймер після завантаження сторінки
+    window.onload = function () {
+        setTimeout(countdown, 1000); // Початкове запуск таймера
+    };
 </script>
 {% endblock %}
-
