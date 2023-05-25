@@ -142,14 +142,24 @@ def course_modules(request, id):
 @user_passes_test(student_check)
 def courses_id_module_id_lecture(request, id, id_module, id_lecture):
     user = request.user
+    next_lecture=''
+    prev_lecture = ''
+    n_lec=id_lecture+1
+    p_lec=id_lecture-1
     if not if_user_has_course(user.id, id):
         return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
+    lections=Lection.objects.filter(module_id=id_module)
+    tests = Test.objects.filter(module_id=id_module)
+    if Lection.objects.filter(module_id=id_module, id=n_lec):
+        next_lecture = id_lecture + 1
+    if Lection.objects.filter(module_id=id_module, id=p_lec):
+        prev_lecture = id_lecture - 1
     if module and course:
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
         return render(request, 'lecture.html',
-                      context={"course": course[0], "module": module[0], 'lecture': lectures[0], 'user': request.user})
+                      context={"course": course[0], "module": module[0], 'lections':lections, 'tests':tests,'lecture': lectures[0], 'user': request.user,'next_lecture':next_lecture,'prev_lecture':prev_lecture})
     return HttpResponseNotFound("not found")
 
 
