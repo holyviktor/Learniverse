@@ -77,34 +77,36 @@
         </div>
     </div>
     <div class="col-md-9">
-        <h1>{{ course.name }}</h1>
-        {% if lecture %}
-        <h2>Лекція: {{ lecture.title }}</h2>
-        {% video lecture.video %}
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 ml-auto mr-auto">
-                    <div class="brand text-center">
-                        <!-- Відео лекції -->
+        <div class="lecture-content">
+            <h1>{{ course.name }}</h1>
+            {% if lecture %}
+            <h2>Лекція: {{ lecture.title }}</h2>
+            {% video lecture.video %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 ml-auto mr-auto">
+                        <div class="brand text-center">
+                            <!-- Відео лекції -->
+                        </div>
                     </div>
                 </div>
             </div>
+            <h3>Опис: {{ lecture.description }}</h3>
+            {% if prev_lecture %}
+            <a href="{% url 'lecture' course.id module.id prev_lecture %}" class="btn btn-primary">
+                Попередня лекція
+            </a>
+            {% endif %}
+            <a class="btn btn-primary">
+                {{ lecture.id }}
+            </a>
+            {% if next_lecture %}
+            <a href="{% url 'lecture' course.id module.id next_lecture %}" class="btn btn-primary">
+                Наступна лекція
+            </a>
+            {% endif %}
+            {% endif %}
         </div>
-        <h3>Опис: {{ lecture.description }}</h3>
-        {% if prev_lecture %}
-        <a href="{% url 'lecture' course.id module.id prev_lecture %}" class="btn btn-primary">
-            Попередня лекція
-        </a>
-        {% endif %}
-        <a class="btn btn-primary">
-            {{ lecture.id }}
-        </a>
-        {% if next_lecture %}
-        <a href="{% url 'lecture' course.id module.id next_lecture %}" class="btn btn-primary">
-            Наступна лекція
-        </a>
-        {% endif %}
-        {% endif %}
     </div>
 </div>
 {% endblock %}

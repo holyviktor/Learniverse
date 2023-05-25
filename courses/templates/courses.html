@@ -3,129 +3,128 @@
 {% block content %}
 <style>
     /* Контейнер курсів */
-.course-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 20px;
-}
+    .course-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
 
-/* Список курсів */
-.course-list {
-  flex-basis: 15%;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+    /* Список курсів */
+    .course-list {
+        flex-basis: 15%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
 
-.course-list li {
-  margin-bottom: 10px;
-}
+    .course-list li {
+        margin-bottom: 10px;
+    }
 
-/* Колонки курсів */
-.course-columns {
-  display: flex;
-  flex-basis: 80%;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
+    /* Колонки курсів */
+    .course-columns {
+        display: flex;
+        flex-basis: 80%;
+        flex-wrap: wrap;
+        justify-content: start;
+    }
 
-.course-column {
-  background-color: #f2f2f2;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  padding: 20px;
-  width: 48%;
-  margin: 1%;
-}
+    .course-column {
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        width: 31%;
+        margin: 1%;
+    }
 
-.course-column h3 {
-  margin-top: 0;
-}
+    .course-column h3 {
+        margin-top: 0;
+    }
 
-.course-column p {
-  margin-bottom: 10px;
-}
+    .course-column p {
+        margin-bottom: 10px;
+    }
 
-/* Посилання на курс */
-a {
-  color: #0077cc;
-  text-decoration: none;
-}
+    /* Посилання на курс */
+    a {
+        color: #0077cc;
+        text-decoration: none;
+    }
 
-a:hover {
-  text-decoration: underline;
-}
+    a:hover {
+        text-decoration: underline;
+    }
+    .course-column p {
+        margin-bottom: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+
+
 </style>
-{% if category %}
-    <h2>Категорія: {{ category }}</h2>
-{% else  %}
-    <h2>Категорії</h2>
-{% endif %}
+<h2 class="text-center">Курси</h2>
+
 <div class="course-container">
-<div>
-    <form>
+    <div class="col-md-2">
+        <form>
+            <ul class="course-list">
+                {% for category in categories %}
+                <li>
+                    <button class="btn btn-link" type="submit" name="category" value="{{ category.id }}">{{ category.name }}
+                    </button>
+                </li>
+                {% empty %}
+                <li>На даний момент немає курсів.</li>
+                {% endfor %}
+            </ul>
+        </form>
+    </div>
 
-    <ul class="course-list">
-
-      {% for category in categories %}
-        <li>
-            <button type="submit" name="category" value="{{ category.id }}">{{ category.name }}</button>
-        </li>
-      {% empty %}
-        <li>На даний момент немає курсів.</li>
-      {% endfor %}
-
-
-    </ul>
-    </form>
-</div>
-
-<div>
-    <div class="course-columns">
+    <div class="col-md-10">
         <form action="">
-            <input type="text" name="search" value="{{ search }}" placeholder="Пошук">
+            <input class="form-control" type="text" name="search" value="{{ search }}" placeholder="Пошук">
         </form>
-      {% for course, show_enroll in courses.items %}
-        <div class="course-column">
-          <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
-          <p>Категорія: {{ course.category.name }}</p>
-            <p>Опис: {{ course.description }}</p>
+        <div class="course-columns">
+            {% for course, show_enroll in courses.items %}
+            <div class="course-column">
+            <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
+            <p>Категорія: {{ course.category.name }}</p>
+            <p>{{ course.description }}</p>
+                <p><a href="{% url 'course' course.id %}">Детальніше</a></p>
             <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
-          <p>Тривалість: {{ course.duration }}</p>
-            <form method="post">
-                {% csrf_token %}
-                {% if show_enroll%}
+            <p>Тривалість: {{ course.duration }}</p>
+            <div class="row">
+                <form class="col-md-2" method="post" action="{% url 'like' %}">
+                    {% csrf_token %}
+                    {% if course.id in wishlist %}
+                    <button class="btn btn-primary" type="submit">Dislike</button>
+                    {% else %}
+                    <button class="btn btn-primary" type="submit">Like</button>
+                    {% endif %}
+                    <input type="hidden" value="{{ course.id }}" name="id">
+                </form>
+                <form class="col" method="post">
+                    {% csrf_token %}
+                    {% if show_enroll %}
                     <button class="btn btn-primary" type="submit">Зареєструватись</button>
-                    <input type="hidden" value="{{course.id}}" name="course_enroll">
-                {% else %}
+                    <input type="hidden" value="{{ course.id }}" name="course_enroll">
+                    {% else %}
                     <button class="btn btn-primary" type="submit">Покинути</button>
-                    <input type="hidden" value="{{course.id}}" name="course_delete">
-                {% endif %}
-            </form>
-
-        <form method="post" action="{% url 'like' %}">
-            {% csrf_token %}
-            {% if course.id in wishlist %}
-            <button class="btn btn-primary" type="submit">Dislike</button>
-            {% else %}
-            <button class="btn btn-primary" type="submit">Like</button>
-            {% endif %}
-            <input type="hidden" value="{{course.id}}" name="id">
-        </form>
+                    <input type="hidden" value="{{ course.id }}" name="course_delete">
+                    {% endif %}
+                </form>
+            </div>
         </div>
-      {% empty %}
+        {% empty %}
         <p>На даний момент немає курсів.</p>
-      {% endfor %}
+        {% endfor %}
+        </div>
     </div>
 </div>
-  </div>
-<!--{% for course in courses %}-->
-<!--    <h3>{{ course.name }}</h3>-->
-<!--    <h4>{{ course.category.name }}</h4>-->
-<!--    <h4>{{ course.description }}</h4>-->
-<!--    <h4>Teacher: {{ course.teacher.name }} {{ course.teacher.surname }}</h4>-->
-<!--{% endfor %}-->
 {% endblock %}
-

@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    /* Контейнер курсів */
+    .course-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
 
+    /* Заголовок */
+    h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Параграф */
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+</style>
 
 <div class="course-container">
-  <h2>Тест вже пройдено!</h2>
-    <p>Ви вже проходили цей тест. Ваша оцінка: {{ grade }} </p>
+    <h2>Тест вже пройдено!</h2>
+    <p>Ви вже проходили цей тест. Ваша оцінка: {{ grade }}</p>
 </div>
 {% endblock %}
+
 
