@@ -8,6 +8,7 @@
     <p>Тривалість: {{ course.duration }}
     <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
     <p>{{ course.description }}</p>
+    <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
     <div class="row">
         <form class="col-md-1 mb-1" method="post" action="{% url 'like' %}">
             {% csrf_token %}

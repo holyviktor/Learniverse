@@ -224,28 +224,3 @@ def get_wishlist(request):
     return wishlist
 
 
-def generate_certificate(request):
-    participant_name = "John Doe"  # Замініть на реальне ім'я учасника
-
-    # Генерація сертифіката у форматі PDF
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer)
-
-    p.setFont("Helvetica", 24)
-    p.drawString(100, 700, "certificate")
-    p.setFont("Helvetica", 16)
-    p.drawString(100, 650, "Цей сертифікат видається")
-    p.setFont("Helvetica", 20)
-    p.drawString(100, 600, "за успішне проходження курсу Django")
-    p.setFont("Helvetica", 24)
-    p.drawString(100, 500, participant_name)
-
-    p.showPage()
-    p.save()
-
-    buffer.seek(0)
-
-    response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
-
-    return response

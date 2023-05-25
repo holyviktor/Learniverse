@@ -14,6 +14,6 @@ urlpatterns = [
     path('delete_course/<int:id_course>', views.teacher_delete_id),
     path('change_wish_list', views.change_wishlist, name="like"),
     # path('delete_course_to_wish_list', views.del_course_to_wishlist, name="dislike"),
-    path('wishlist', views.student_wishlist, name='wishlist'),
-    path('certificate', views.generate_certificate, name='generate_certificate')
+    path('wishlist', views.student_wishlist, name='wishlist')
+
 ]

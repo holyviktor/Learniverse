@@ -11,6 +11,20 @@ from profiles.views import student_check, get_wishlist, rating_course
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
 
+from django.http import HttpResponse
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.conf import settings
+from django.contrib.auth.models import User
+from reportlab.pdfgen import canvas
+from io import BytesIO
+import os
+
 
 def if_user_has_course(user_id, course_id):
     user_course = UserCourse.objects.filter(user_id=user_id, course_id=course_id)
@@ -98,7 +112,9 @@ def courses_index(request):
     print(show_course_enroll)
     # return render(request, 'login.html', {'form': form})
     wishlist = get_wishlist(request)
-    return render(request, 'courses.html', context={"courses": show_course_enroll, "categories": categories,  "wishlist": wishlist, 'user': request.user})
+    return render(request, 'courses.html',
+                  context={"courses": show_course_enroll, "categories": categories, "wishlist": wishlist,
+                           'user': request.user})
 
 
 def courses_search(request, name):
@@ -117,7 +133,8 @@ def course_modules(request, id):
     course = Course.objects.filter(id=id)
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
-        return render(request, 'course_modules.html', context={"course": course[0], "modules": modules, 'user': request.user})
+        return render(request, 'course_modules.html',
+                      context={"course": course[0], "modules": modules, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -160,7 +177,7 @@ def courses_id(request, id):
         modules = Module.objects.filter(course_id=course[0].id)
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
                                                        "show_enroll": show_enroll, 'user': request.user,
-                                                       "show_btn_modules":show_btn_modules})
+                                                       "show_btn_modules": show_btn_modules})
     return HttpResponseNotFound("not found")
 
 
@@ -170,7 +187,8 @@ def courses_category(request, name):
         category_id = category.first().id
         courses_by_category = Course.objects.filter(category_id=category_id)
         if courses_by_category is not None:
-            return render(request, 'courses.html', context={"courses": courses_by_category, 'category': name, 'user': request.user})
+            return render(request, 'courses.html',
+                          context={"courses": courses_by_category, 'category': name, 'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -186,7 +204,8 @@ def courses_id_module_id(request, id, id_module):
         lections = Lection.objects.filter(module_id=id_module)
         tests = Test.objects.filter(module_id=id_module)
         return render(request, 'module.html',
-                      context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests, 'user': request.user})
+                      context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests,
+                               'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -230,7 +249,8 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         tests = Test.objects.filter(module_id=id_module, id=id_test)
         questions = Question.objects.filter(test_id=id_test)
         return render(request, 'test.html',
-                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions, 'user': request.user})
+                      context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions,
+                               'user': request.user})
     return HttpResponseNotFound("not found")
 
 
@@ -238,4 +258,29 @@ def video(request):
     videos = Video.objects.filter()
     return render(request, 'vid.html', context={"videos": videos, 'user': request.user})
 
+#
+def generate_certificate(request, id):
+    user = request.user
+    course = Course.objects.filter(id=id)
+    participant_name = str(user.name)+' '+str(user.surname)
+
+    font_path = os.path.join(settings.BASE_DIR, 'font', 'AlegreSans-Regular.ttf')
+    # Генерація сертифіката у форматі PDF
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+
+    p.setFont(font_path, 24)
+    p.drawString(100, 700, "Certificate")
+    p.setFont(font_path, 16)
+    p.drawString(100, 650, "Цей сертифікат видається")
+    p.setFont(font_path, 20)
+    p.drawString(100, 600, "за успішне проходження"+course[0].name)
+    p.setFont(font_path, 24)
+    p.drawString(100, 500, participant_name)
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    return response
 
