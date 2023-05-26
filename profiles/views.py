@@ -1,12 +1,9 @@
-from itertools import chain
-
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from courses.models import UserCourse, Test, Module, UserTest, Course
 from profiles.models import User
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, logout
 
 from profiles.form import LoginForm, SignUpForm
 from django.contrib.auth.hashers import check_password
@@ -22,7 +19,10 @@ def count_course_mark(user_id, course_id):
             user_test = UserTest.objects.filter(user_id=user_id, test_id=test.id)
             for user_test_module in user_test:
                 total_mark += user_test_module.grade
-    total_mark = total_mark/count_tests
+    if count_tests:
+        total_mark = total_mark/count_tests
+    else:
+        total_mark = 0
     return total_mark
 
 
