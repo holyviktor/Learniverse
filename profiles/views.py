@@ -28,7 +28,10 @@ def count_course_mark(user_id, course_id):
             user_test = UserTest.objects.filter(user_id=user_id, test_id=test.id)
             for user_test_module in user_test:
                 total_mark += user_test_module.grade
-    total_mark = total_mark / count_tests
+    if not count_tests:
+        total_mark = 0
+    else:
+        total_mark = total_mark / count_tests
     return total_mark
 
 

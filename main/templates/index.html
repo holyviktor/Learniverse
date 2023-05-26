@@ -69,7 +69,7 @@
 {% endif %}
 <div class="course-container">
     <div class="course-columns">
-        {% for course in courses %}
+        {% for course, show_enroll in courses.items %}
         <div class="course-column">
             <h3><a href="{% url 'course' course.id %}">{{ course.name }}</a></h3>
             <p>Категорія: {{ course.category.name }}</p>
