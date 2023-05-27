@@ -77,7 +77,7 @@
             <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
             <p>Тривалість: {{ course.duration }}</p>
             <div class="row">
-                <form class="col-md-2" method="post" action="{% url 'like' %}">
+                <form class="col-md-3" method="post" action="{% url 'like' %}">
                     {% csrf_token %}
                     {% if course.id in wishlist %}
                     <button class="btn btn-primary" type="submit">Dislike</button>

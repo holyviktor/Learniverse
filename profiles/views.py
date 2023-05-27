@@ -35,6 +35,12 @@ def count_course_mark(user_id, course_id):
     return total_mark
 
 
+class Rating:
+    def __init__(self, user, total_mark):
+        self.user = user
+        self.total_mark = total_mark
+
+
 def rating_course(course_id):
     total_marks = {}
     users = []
@@ -44,7 +50,8 @@ def rating_course(course_id):
         print(course_user.user.id)
     total_marks = sorted(total_marks.items(), key=lambda x: x[1], reverse=True)
     for key, value in total_marks:
-        users.append(User.objects.get(id=key))
+        # users.append(User.objects.get(id=key))
+        users.append(Rating(User.objects.get(id=key), value))
     print(users)
     return users
 
@@ -186,7 +193,8 @@ def student_wishlist(request):
         wishlist = list(map(int, wishlist))
         for i in wishlist:
             courses.append(Course.objects.get(id=i))
-    response = render(request, 'wishlist.html', context={"courses": courses, 'user': request.user})
+    wishlist = get_wishlist(request)
+    response = render(request, 'wishlist.html', context={"courses": courses, 'user': request.user, 'wishlist': wishlist})
     return response
 
 
