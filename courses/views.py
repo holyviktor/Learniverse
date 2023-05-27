@@ -166,7 +166,7 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
 
 
 def courses_id(request, id):
-    rating_course(id)
+    rating = rating_course(id)
     show_btn_modules = False
     course = Course.objects.filter(id=id)
     user = request.user
@@ -187,9 +187,10 @@ def courses_id(request, id):
         show_btn_modules = True
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
+        wishlist = get_wishlist(request)
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
                                                        "show_enroll": show_enroll, 'user': request.user,
-                                                       "show_btn_modules": show_btn_modules})
+                                                       "show_btn_modules": show_btn_modules, 'wishlist': wishlist, 'rating': rating})
     return HttpResponseNotFound("not found")
 
 

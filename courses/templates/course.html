@@ -140,5 +140,10 @@ ul {
     <a href="{% url 'modules' course.id %}">Усі модулі</a>
     {% endif %}
 </section>
+<section>
+{% for r in rating %}
+    <p>{{r.user.name}} - {{ r.total_mark }}</p>
+{% endfor %}
+</section>
 {% endblock %}
 

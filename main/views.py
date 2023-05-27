@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from courses.models import Category, Course, User, UserCourse
 from courses.views import enroll_course
+from profiles.views import get_wishlist
 
 
 # Create your views here.
@@ -24,7 +25,9 @@ def main_index(request):
                 show_course_enroll[course] = True
         else:
             show_course_enroll[course] = True
-    return render(request, 'index.html', context={"courses": show_course_enroll, 'user': request.user })
+    wishlist = get_wishlist(request)
+    return render(request, 'index.html', context={"courses": show_course_enroll, 'user': request.user,
+                                                  'wishlist': wishlist})
 
 
 def main_about(request):
