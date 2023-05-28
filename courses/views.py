@@ -218,7 +218,7 @@ def courses_id_module_id(request, id, id_module):
     if Module.objects.filter(id=p_mod):
         prev_mod = id_module - 1
     if not if_user_has_course(user.id, id):
-        return HttpResponseNotFound("not found")
+        return HttpResponseNotFound("Для перегляду модулів курсу спочатку зареєструйтесь на курс.")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
@@ -235,7 +235,7 @@ def courses_id_module_id(request, id, id_module):
 def courses_id_module_id_test(request, id, id_module, id_test):
     user = request.user
     if not if_user_has_course(user.id, id):
-        return HttpResponseNotFound("not found")
+        return HttpResponseNotFound("Для проходження тестів курсу спочатку зареєструйтесь на курс.")
     # user_id = request.session.get('user_id')
     if user.is_authenticated:
         user_test = UserTest.objects.filter(test_id=id_test, user_id=user.id)
