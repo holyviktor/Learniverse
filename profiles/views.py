@@ -19,6 +19,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+
 def count_course_mark(user_id, course_id):
     course = Course.objects.filter(id=course_id).first()
     count_tests = 0
@@ -48,12 +49,12 @@ def rating_course(course_id):
     course_users = UserCourse.objects.filter(course_id=course_id)
     for course_user in course_users:
         total_marks[course_user.user.id] = count_course_mark(course_user.user.id, course_id)
-        print(course_user.user.id)
+        # print(course_user.user.id)
     total_marks = sorted(total_marks.items(), key=lambda x: x[1], reverse=True)
     for key, value in total_marks:
         # users.append(User.objects.get(id=key))
         users.append(Rating(User.objects.get(id=key), value))
-    print(users)
+    # print(users)
     return users
 
 

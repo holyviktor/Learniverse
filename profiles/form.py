@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 
 from profiles.models import User
+import re
 
 
 class LoginForm(forms.Form):
@@ -61,12 +62,40 @@ class SignUpForm(forms.Form):
         user.phone_number = self.cleaned_data['phone_number']
         user.description = self.cleaned_data['description']
         user.role = "student"
-        # if self.cleaned_data['role']:
-        #     user.role = 'teacher'
-        # else:
-        #     user.role = 'user'
         user.save()
         return user
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        pattern = r'^\+?\d{9,15}$'
+        if not re.match(pattern, phone_number):
+            raise forms.ValidationError("Неправильний формат номера телефону")
+        return phone_number
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        if not re.match(pattern, email):
+            raise forms.ValidationError("Неправильний формат пошти")
+        elif User.objects.filter(email=email):
+            raise forms.ValidationError("Користувач з такою електронною поштою вже існує")
+        return email
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if not name.isalpha():
+            raise forms.ValidationError("неправильно введено ім'я")
+        return name
+
+    def clean_surname(self):
+        surname = self.cleaned_data['surname']
+        if not surname.isalpha():
+            raise forms.ValidationError("неправильно введено прізвище")
+        return surname
+
+
+
+
 
 
 
