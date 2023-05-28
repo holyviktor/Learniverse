@@ -88,7 +88,7 @@
 <h1>Мої уподобані курси</h1>
 
 <ul class="course-list">
-    {% for course in courses %}
+   {% for course, show_enroll in courses.items %}
     <li>
         <a href="{% url 'course' course.id %}"><h2>{{ course.name }}</h2></a>
         <p>{{ course.description }}</p>

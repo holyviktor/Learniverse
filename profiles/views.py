@@ -5,6 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from courses.models import UserCourse, Test, Module, UserTest, Course
+
 from profiles.models import User
 from django.contrib.auth import login, authenticate, logout
 
@@ -186,15 +187,33 @@ def teacher_delete_id(request):
 
 
 def student_wishlist(request):
+    from courses.views import enroll_course
     courses = []
+    user = request.user
+    if request.method == 'POST':
+        if user.is_authenticated:
+            enroll_course(request)
+        else:
+            return redirect('login')
     if 'Wishlist_user' in request.COOKIES:
         cookie = request.COOKIES['Wishlist_user']
         wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
         for i in wishlist:
             courses.append(Course.objects.get(id=i))
+    show_course_enroll = {}
+
+    for course in courses:
+        if user.is_authenticated:
+            user_course = UserCourse.objects.filter(user_id=user.id, course_id=course.id)
+            if user_course:
+                show_course_enroll[course] = False
+            else:
+                show_course_enroll[course] = True
+        else:
+            show_course_enroll[course] = True
     wishlist = get_wishlist(request)
-    response = render(request, 'wishlist.html', context={"courses": courses, 'user': request.user, 'wishlist': wishlist})
+    response = render(request, 'wishlist.html', context={"courses": show_course_enroll, 'user': request.user, 'wishlist': wishlist})
     return response
 
 
