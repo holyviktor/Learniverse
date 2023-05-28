@@ -1,104 +1,191 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    .login-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-}
+    <style>
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.login-form h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
+        .login-form h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  width: 100%;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            width: 100%;
+        }
 
-.form-group label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-.form-group input[type="email"],
-.form-group input[type="password"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-}
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
 
-button[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-button[type="submit"]:hover {
-  background-color: #0062cc;
-}
+        button[type="submit"]:hover {
+            background-color: #0062cc;
+        }
 
-</style>
+    </style>
     {% if errors %}
-  <ul class="errorlist">
-    {% for field, error_list in errors.items %}
-      {% for error in error_list %}
-        <li>{{ field }}: {{ error.message }}</li>
-      {% endfor %}
-    {% endfor %}
-  </ul>
-{% endif %}
-<form method="post" class="login-form">
-    <h2>Зареєструватись</h2>
-    <div class="form-group">
-         {% csrf_token %}
-        <div>
-            <label class="form-label" for="signUpName">Ім'я</label>
-            <div class="border rounded">{{ form.name }}</div>
-        </div>
-        <div>
-            <label class="form-label" for="signUpSurname">Прізвище</label>
-            <div class="border rounded">{{ form.surname }}</div>
-        </div>
-        <div>
-            <label class="form-label" for="signUpDateBirth">Дата народження</label>
-            <div class="border rounded">{{ form.date_birth }}</div>
-        </div>
-        <div>
-            <label class="form-label" for="signUpPhoneNumber">Номер телефону</label>
-            <div class="border rounded">{{ form.phone_number }}</div>
-        </div>
-        <div>
+        <ul class="errorlist">
+            {% for field, error_list in errors.items %}
+                {% for error in error_list %}
+                    <li>{{ field }}: {{ error.message }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post" class="login-form">
+        <h2>Зареєструватись</h2>
+        <div class="form-group">
+            {% csrf_token %}
+            {% if form.errors.name %}
+                <div>
+                    <label class="form-label" for="signUpName">Ім'я</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.name }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.name %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpName">Ім'я</label>
+                    <div class="border rounded">{{ form.name }}</div>
+                </div>
+            {% endif %}
+
+
+            {% if form.errors.surname %}
+                <div>
+                    <label class="form-label" for="signUpSurname">Прізвище</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.surname }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.surname %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpSurname">Прізвище</label>
+                    <div class="border rounded">{{ form.surname }}</div>
+                </div>
+            {% endif %}
+
+            {% if form.errors.date_birth %}
+                <div>
+                    <label class="form-label" for="signUpDateBirth">Дата народження</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.date_birth }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.date_birth %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpDateBirth">Дата народження</label>
+                    <div class="border rounded">{{ form.date_birth }}</div>
+                </div>
+            {% endif %}
+            {% if form.errors.phone_number %}
+                <div>
+                    <label class="form-label" for="signUpPhoneNumber">Номер телефону</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.phone_number }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.phone_number %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpPhoneNumber">Номер телефону</label>
+                    <div class="border rounded">{{ form.phone_number }}</div>
+                </div>
+            {% endif %}
+            {% if form.errors.email %}
+                <div>
+                    <label class="form-label" for="signUpEmail">Email</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.email }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.email %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpEmail">Email</label>
+                    <div class="border rounded">{{ form.email }}</div>
+                </div>
+            {% endif %}
+            {% if form.errors.password %}
+                <div>
+                    <label class="form-label" for="signUpPassword">Пароль</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.password }}</div>
+                </div>
+                <div class="errorlist">
+                    {% for error in form.errors.password %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div>
+                    <label class="form-label" for="signUpPassword">Пароль</label>
+                    <div class="border rounded">{{ form.password }}</div>
+                </div>
+            {% endif %}
+        {%  if form.errors.descrption %}
             <div>
-            <label class="form-label" for="signUpEmail">Email</label>
-            <div class="border rounded">{{ form.email }}</div>
+                <label class="form-label" for="signUpDescription">Опис</label>
+                <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.description }}</div>
+            </div>
+             <div class="errorlist">
+                    {% for error in form.errors.description %}
+                        <div style="color:#FF0000;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% else %}
+            <div>
+                <label class="form-label" for="signUpDescription">Опис</label>
+                <div class="border rounded">{{ form.description }}</div>
+            </div>
+        {% endif %}
         </div>
-        <div>
-            <label class="form-label" for="signUpPassword">Пароль</label>
-            <div class="border rounded">{{ form.password }}</div>
-        </div>
-        <div>
-            <label class="form-label" for="signUpDescription">Опис</label>
-            <div class="border rounded">{{ form.description }}</div>
-        </div>
-    </div>
-    <button type="submit">Зареєструватись</button>
-    </div>
-</form>
+        <button type="submit">Зареєструватись</button>
+
+    </form>
 {% endblock %}
 

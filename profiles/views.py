@@ -19,6 +19,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+
 def count_course_mark(user_id, course_id):
     course = Course.objects.filter(id=course_id).first()
     count_tests = 0
@@ -48,12 +49,12 @@ def rating_course(course_id):
     course_users = UserCourse.objects.filter(course_id=course_id)
     for course_user in course_users:
         total_marks[course_user.user.id] = count_course_mark(course_user.user.id, course_id)
-        print(course_user.user.id)
+        # print(course_user.user.id)
     total_marks = sorted(total_marks.items(), key=lambda x: x[1], reverse=True)
     for key, value in total_marks:
         # users.append(User.objects.get(id=key))
         users.append(Rating(User.objects.get(id=key), value))
-    print(users)
+    # print(users)
     return users
 
 
@@ -75,20 +76,11 @@ def count_course_pass(user_id, course_id):
 
 @login_required(login_url='login')
 def profiles_index(request):
-    # print("here i am")
-    # user_id = request.session.get("user_id")
-    # print(user_id)
-    # user_id = 1
-
     user = request.user
-
-    # id = request.session.get("user_id")
-    # user = User.objects.get(id=id)
     if user.is_authenticated:
         courses = UserCourse.objects.filter(user_id=user.id)
         count = 0
         result = 0
-
         courses_pass = []
         if len(courses) != 0:
             for course in courses:
@@ -121,12 +113,14 @@ def profiles_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
+            print("valid")
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
                 user = User.objects.get(email=email)
                 if check_password(password, user.password):
                     login(request, user)
+                    print("good")
                     return redirect('profile')
                 else:
                     raise User.DoesNotExist
@@ -139,7 +133,6 @@ def profiles_login(request):
 
 def profiles_logout(request):
     logout(request)
-
     return redirect('main')
 
 
@@ -155,22 +148,20 @@ def student_check(user):
 def user_courses(request):
     user = request.user
     if user.is_authenticated:
-
         courses = UserCourse.objects.filter(user_id=user.id)
         courses_pass = []
-
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
         return render(request, 'usercourses.html',
                       context={"courses": zip(courses, courses_pass), 'user': request.user})
-    return HttpResponse("teacher_courses")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponse("teacher_courses")
 
 
 @login_required(login_url='login')
 @user_passes_test(student_check)
 def user_course_id(request, id_course):
     user = request.user
-
     if user.is_authenticated and Course.objects.filter(id=id_course):
         print(user.id, id_course)
         count = count_course_pass(user.id, id_course)
@@ -213,7 +204,8 @@ def student_wishlist(request):
         else:
             show_course_enroll[course] = True
     wishlist = get_wishlist(request)
-    response = render(request, 'wishlist.html', context={"courses": show_course_enroll, 'user': request.user, 'wishlist': wishlist})
+    response = render(request, 'wishlist.html',
+                      context={"courses": show_course_enroll, 'user': request.user, 'wishlist': wishlist})
     return response
 
 
@@ -252,5 +244,3 @@ def get_wishlist(request):
     else:
         wishlist = []
     return wishlist
-
-
