@@ -184,12 +184,10 @@ def courses_id(request, id):
     is_over = False
     if user.is_authenticated:
         user_course = UserCourse.objects.filter(user_id=user.id, course_id=id)
-        is_over = user_course.first().certified
-        if user_course:
+        if if_user_has_course(user.id, id):
             show_enroll = False
-    user = request.user
-    if user and if_user_has_course(user.id, id):
-        show_btn_modules = True
+            is_over = user_course.first().certified
+            show_btn_modules = True
     if course:
         modules = Module.objects.filter(course_id=course[0].id)
         wishlist = get_wishlist(request)
