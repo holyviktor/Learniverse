@@ -178,8 +178,10 @@ def courses_id(request, id):
         else:
             return redirect('login')
     show_enroll = True
+    is_over = False
     if user.is_authenticated:
         user_course = UserCourse.objects.filter(user_id=user.id, course_id=id)
+        is_over = user_course.first().certified
         if user_course:
             show_enroll = False
     user = request.user
@@ -190,7 +192,8 @@ def courses_id(request, id):
         wishlist = get_wishlist(request)
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
                                                        "show_enroll": show_enroll, 'user': request.user,
-                                                       "show_btn_modules": show_btn_modules, 'wishlist': wishlist, 'rating': rating})
+                                                       "show_btn_modules": show_btn_modules, 'wishlist': wishlist,
+                                                       'rating': rating, 'is_over':is_over})
     return HttpResponseNotFound("not found")
 
 
@@ -234,6 +237,7 @@ def courses_id_module_id(request, id, id_module):
 @user_passes_test(student_check)
 def courses_id_module_id_test(request, id, id_module, id_test):
     user = request.user
+    message_course_over = False
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if not if_user_has_course(user.id, id):
@@ -279,10 +283,11 @@ def courses_id_module_id_test(request, id, id_module, id_test):
                 user_course = UserCourse.objects.filter(user_id=user.id, course_id=course[0].id).first()
                 user_course.certified = 1
                 user_course.save()
+                message_course_over = True
                 # print("Курс завершено!")
             # return HttpResponse(f"Your mark is {mark}/{count_questions}")
             return render(request, 'result_test.html',
-                          context={"mark": mark, "count_questions":count_questions})
+                          context={"mark": mark, "count_questions":count_questions, "message_course_over":message_course_over})
 
 
     if module and course:

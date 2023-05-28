@@ -121,7 +121,10 @@ ul {
             <input type="hidden" value="{{course.id}}" name="course_delete">
             {% endif %}
         </form>
+    {% if is_over %}
+        <p>Курс завершено!</p>
         <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
+    {% endif %}
     </div>
 </section>
 <section>
