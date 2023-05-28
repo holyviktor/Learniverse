@@ -234,9 +234,10 @@ def courses_id_module_id(request, id, id_module):
 @user_passes_test(student_check)
 def courses_id_module_id_test(request, id, id_module, id_test):
     user = request.user
+    course = Course.objects.filter(id=id)
+    module = Module.objects.filter(id=id_module, course_id=id)
     if not if_user_has_course(user.id, id):
         return HttpResponseNotFound("Для проходження тестів курсу спочатку зареєструйтесь на курс.")
-    # user_id = request.session.get('user_id')
     if user.is_authenticated:
         user_test = UserTest.objects.filter(test_id=id_test, user_id=user.id)
         if user_test:
@@ -264,12 +265,26 @@ def courses_id_module_id_test(request, id, id_module, id_test):
             grade = mark / count_questions * 100
             member = UserTest(grade=grade, test_id=id_test, user_id=user.id)
             member.save()
+            count_tests = 0
+            count_user_tests = 0
+            for module in course[0].modules.all():
+                test = Test.objects.filter(module_id=module.id)
+                count_tests += test.count()
+                for test_item in test:
+                    user_tests = UserTest.objects.filter(test_id=test_item.id, user_id=user.id)
+                    count_user_tests += user_tests.count()
+            print(count_tests)
+            print(count_user_tests)
+            if count_user_tests >= count_tests:
+                user_course = UserCourse.objects.filter(user_id=user.id, course_id=course[0].id).first()
+                user_course.certified = 1
+                user_course.save()
+                # print("Курс завершено!")
             # return HttpResponse(f"Your mark is {mark}/{count_questions}")
             return render(request, 'result_test.html',
                           context={"mark": mark, "count_questions":count_questions})
 
-    course = Course.objects.filter(id=id)
-    module = Module.objects.filter(id=id_module, course_id=id)
+
     if module and course:
         tests = Test.objects.filter(module_id=id_module, id=id_test)
         questions = Question.objects.filter(test_id=id_test)
