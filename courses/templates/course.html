@@ -124,6 +124,7 @@ ul {
     {% if is_over %}
         <p>Курс завершено!</p>
         <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
+        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary">Сертифікат на пошту</a>
     {% endif %}
     </div>
 </section>

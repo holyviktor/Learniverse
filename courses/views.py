@@ -1,3 +1,5 @@
+import mimetypes
+from email.message import EmailMessage
 from itertools import chain
 
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -5,11 +7,18 @@ from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from datetime import datetime
 
+from validate_email import validate_email
+
 from profiles.models import User
 from courses.models import Video
 from profiles.views import student_check, get_wishlist, rating_course
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 from django.http import HttpResponse
 from io import BytesIO
@@ -309,14 +318,12 @@ def video(request):
     videos = Video.objects.filter()
     return render(request, 'vid.html', context={"videos": videos, 'user': request.user})
 
-#
-def generate_certificate(request, id):
-    user = request.user
-    course = Course.objects.filter(id=id)
-    participant_name = str(user.name)+' '+str(user.surname)
+
+def make_certificate(user, course):
+    participant_name = str(user.name) + ' ' + str(user.surname)
 
     # font_path = os.path.join(settings.BASE_DIR, 'font', 'AlegreSans-Regular.ttf')
-    font_path="Helvetica"
+    font_path = "Helvetica"
     # Генерація сертифіката у форматі PDF
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
@@ -326,13 +333,44 @@ def generate_certificate(request, id):
     p.setFont(font_path, 16)
     p.drawString(100, 650, "Цей сертифікат видається")
     p.setFont(font_path, 20)
-    p.drawString(100, 600, "за успішне проходження"+course[0].name)
+    p.drawString(100, 600, "за успішне проходження" + course[0].name)
     p.setFont(font_path, 24)
     p.drawString(100, 500, participant_name)
     p.showPage()
     p.save()
     buffer.seek(0)
+    return buffer
+def generate_certificate(request, id):
+    user = request.user
+    course = Course.objects.filter(id=id)
+    buffer = make_certificate(user, course)
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
     return response
 
+def send_certificate(request, id):
+    user = request.user
+    course = Course.objects.filter(id=id)
+    buffer = make_certificate(user, course)
+    attachment_filename = "certificate.pdf"
+    body = f"Сертифікат за успішне проходження курсу '{course[0].name}'"
+    sender = 'systems.kpi@gmail.com'
+    password = 'ivrtnhxzvdiunfuu'
+    receiver = user.email
+    message = EmailMessage()
+    message['From'] = sender
+    message['To'] = receiver
+    message['Subject'] = 'Сертифікат Learniverse'
+
+    message.add_attachment(body, 'plain')
+    maintype, _, subtype = (mimetypes.guess_type(attachment_filename)[0] or 'application/octet-stream').partition("/")
+
+    message.add_attachment(buffer.read(), maintype=maintype, subtype=subtype, filename=attachment_filename)
+
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+    session.starttls()
+    session.login(sender, password)
+    text = message.as_string()
+    session.sendmail(sender, receiver, text)
+    session.quit()
+    return HttpResponse("ok")
