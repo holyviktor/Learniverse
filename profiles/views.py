@@ -76,20 +76,11 @@ def count_course_pass(user_id, course_id):
 
 @login_required(login_url='login')
 def profiles_index(request):
-    # print("here i am")
-    # user_id = request.session.get("user_id")
-    # print(user_id)
-    # user_id = 1
-
     user = request.user
-
-    # id = request.session.get("user_id")
-    # user = User.objects.get(id=id)
     if user.is_authenticated:
         courses = UserCourse.objects.filter(user_id=user.id)
         count = 0
         result = 0
-
         courses_pass = []
         if len(courses) != 0:
             for course in courses:
@@ -122,12 +113,14 @@ def profiles_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
+            print("valid")
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             try:
                 user = User.objects.get(email=email)
                 if check_password(password, user.password):
                     login(request, user)
+                    print("good")
                     return redirect('profile')
                 else:
                     raise User.DoesNotExist
@@ -140,7 +133,6 @@ def profiles_login(request):
 
 def profiles_logout(request):
     logout(request)
-
     return redirect('main')
 
 
@@ -156,22 +148,20 @@ def student_check(user):
 def user_courses(request):
     user = request.user
     if user.is_authenticated:
-
         courses = UserCourse.objects.filter(user_id=user.id)
         courses_pass = []
-
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
         return render(request, 'usercourses.html',
                       context={"courses": zip(courses, courses_pass), 'user': request.user})
-    return HttpResponse("teacher_courses")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponse("teacher_courses")
 
 
 @login_required(login_url='login')
 @user_passes_test(student_check)
 def user_course_id(request, id_course):
     user = request.user
-
     if user.is_authenticated and Course.objects.filter(id=id_course):
         print(user.id, id_course)
         count = count_course_pass(user.id, id_course)
@@ -214,7 +204,8 @@ def student_wishlist(request):
         else:
             show_course_enroll[course] = True
     wishlist = get_wishlist(request)
-    response = render(request, 'wishlist.html', context={"courses": show_course_enroll, 'user': request.user, 'wishlist': wishlist})
+    response = render(request, 'wishlist.html',
+                      context={"courses": show_course_enroll, 'user': request.user, 'wishlist': wishlist})
     return response
 
 
@@ -253,5 +244,3 @@ def get_wishlist(request):
     else:
         wishlist = []
     return wishlist
-
-

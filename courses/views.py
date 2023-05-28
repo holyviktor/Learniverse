@@ -121,7 +121,8 @@ def courses_search(request, name):
     courses = Course.objects.filter(name=name)
     if courses:
         return render(request, 'courses.html', context={"courses": courses, 'user': request.user})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -135,7 +136,8 @@ def course_modules(request, id):
         modules = Module.objects.filter(course_id=course[0].id)
         return render(request, 'course_modules.html',
                       context={"course": course[0], "modules": modules, 'user': request.user})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -162,7 +164,8 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
         return render(request, 'lecture.html',
                       context={"course": course[0], "module": module[0], 'lections':lections, 'tests':tests, 'modules':modules, 'lecture': lectures[0], 'user': request.user,'next_lecture':next_lecture,'prev_lecture':prev_lecture})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 def courses_id(request, id):
@@ -194,7 +197,8 @@ def courses_id(request, id):
                                                        "show_enroll": show_enroll, 'user': request.user,
                                                        "show_btn_modules": show_btn_modules, 'wishlist': wishlist,
                                                        'rating': rating, 'is_over':is_over})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 def courses_category(request, name):
@@ -205,7 +209,8 @@ def courses_category(request, name):
         if courses_by_category is not None:
             return render(request, 'courses.html',
                           context={"courses": courses_by_category, 'category': name, 'user': request.user})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -221,7 +226,8 @@ def courses_id_module_id(request, id, id_module):
     if Module.objects.filter(id=p_mod):
         prev_mod = id_module - 1
     if not if_user_has_course(user.id, id):
-        return HttpResponseNotFound("Для перегляду модулів курсу спочатку зареєструйтесь на курс.")
+        return render(request, 'error.html', context={'error': 'Для перегляду модулів курсу спочатку зареєструйтесь на курс'})
+        # return HttpResponseNotFound("Для перегляду модулів курсу спочатку зареєструйтесь на курс.")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
     if module and course:
@@ -230,7 +236,8 @@ def courses_id_module_id(request, id, id_module):
         return render(request, 'module.html',
                       context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests,
                                'user': request.user,'prev_mod':prev_mod,'next_mod':next_mod})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -296,7 +303,8 @@ def courses_id_module_id_test(request, id, id_module, id_test):
         return render(request, 'test.html',
                       context={"course": course[0], "module": module[0], 'test': tests[0], 'questions': questions,
                                'user': request.user})
-    return HttpResponseNotFound("not found")
+    return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
+    # return HttpResponseNotFound("not found")
 
 
 def video(request):
