@@ -401,4 +401,4 @@ def send_certificate(request, id):
     text = message.as_string()
     session.sendmail(sender, receiver, text)
     session.quit()
-    return HttpResponse("ok")
+    return render(request, 'error.html', context={'error': 'Сертифікат було надіслано!'})

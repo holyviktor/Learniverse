@@ -116,19 +116,28 @@ def profiles_login(request):
             print("valid")
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            form.errors.clear()
             try:
-                user = User.objects.get(email=email)
-                if check_password(password, user.password):
-                    login(request, user)
-                    print("good")
-                    return redirect('profile')
+                user = User.objects.filter(email=email)
+                if user:
+                    user = user[0]
+                    if check_password(password, user.password):
+                        login(request, user)
+                        print("good")
+                        return redirect('profile')
+                    else:
+                        form.add_error('password', 'Неправильно введений пароль')
+                        raise User.DoesNotExist
                 else:
+                    form.add_error('email', 'Не існує користувача з такою поштою')
                     raise User.DoesNotExist
             except User.DoesNotExist:
-                form.add_error(None, 'Invalid username or password')
+
+                return render(request, 'login.html', {'form': form, 'user': request.user})
+
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form, 'user': request.user})
+        return render(request, 'login.html', {'form': form, 'user': request.user})
 
 
 def profiles_logout(request):
@@ -154,7 +163,7 @@ def user_courses(request):
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
         return render(request, 'usercourses.html',
-                      context={"courses": zip(courses, courses_pass), 'user': request.user,'wishlist': wishlist})
+                      context={"courses": zip(courses, courses_pass), 'user': request.user, 'wishlist': wishlist})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
     # return HttpResponse("teacher_courses")
 
