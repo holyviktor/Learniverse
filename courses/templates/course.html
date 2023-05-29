@@ -162,6 +162,7 @@ width:100px;
 
 </style>
 <section>
+
     <h1>{{ course.name }}</h1>
     <p>Категорія: {{ course.category.name }}</p>
     <p>Тривалість: {{ course.duration }}
@@ -174,7 +175,7 @@ width:100px;
         <p>{{ user.name }}, Ви вже завершили даний курс, побачити свій результат можете нижче в рейтингу учасників курсу</p>
             </div>
         <div><a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Завантажити сертифікат</a>
-        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary">Відправити сертифікат на пошту</a>
+        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary" onclick="">Відправити сертифікат на пошту</a>
             </div>
         {% else %}
         <form method="post" action="{% url 'like' %}">
@@ -224,5 +225,7 @@ width:100px;
     </div>
   {% endfor %}
 </section>
+
+
 {% endblock %}
 

@@ -10,16 +10,14 @@
     <!-- підключення скриптів Bootstrap -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </head>
+<script>
+    alert("{{ error }}");
+    window.history.back();
+</script>
 <div class="container center-block">
     {{ error }}
 </div>
-{% if error %}
-    <script>
-        alert("{{ error }}");
-        window.history.back();
 
-    </script>
-{% endif %}
 <footer class="footer">
     <!--      <div class="container">-->
     <!--        {% block footer %}{% endblock %}-->
