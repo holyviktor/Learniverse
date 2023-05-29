@@ -322,24 +322,26 @@ def video(request):
 def make_certificate(user, course):
     participant_name = str(user.name) + ' ' + str(user.surname)
 
-    # font_path = os.path.join(settings.BASE_DIR, 'font', 'AlegreSans-Regular.ttf')
+    # font_path = os.path.join(settings.BASE_DIR, 'static', 'AlegreSans-Regular.ttf')
+    # font_path = os.path.join(os.path.dirname(__file__), 'static', 'AlegreSans-Regular.ttf')
     font_path = "Helvetica"
     # Генерація сертифіката у форматі PDF
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
 
     p.setFont(font_path, 24)
-    p.drawString(100, 700, "Certificate")
+    p.drawString(100, 700, "Сертифікат")
     p.setFont(font_path, 16)
     p.drawString(100, 650, "Цей сертифікат видається")
     p.setFont(font_path, 20)
-    p.drawString(100, 600, "за успішне проходження" + course[0].name)
+    p.drawString(100, 600, "за успішне проходження курсу " + course[0].name)
     p.setFont(font_path, 24)
     p.drawString(100, 500, participant_name)
     p.showPage()
     p.save()
     buffer.seek(0)
     return buffer
+
 def generate_certificate(request, id):
     user = request.user
     course = Course.objects.filter(id=id)
