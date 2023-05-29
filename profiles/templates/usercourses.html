@@ -39,7 +39,38 @@
 <h4>{{ course.course.category.name }}</h4>
 <h4>{{ course.course.description }}</h4>
 <h5>Проходження: {{ pass }}%</h5>
-<hr>
+
+<div class="row button-row">
+        {% if is_over %}
+        <div>
+        <p>{{ user.name }}, Ви вже завершили даний курс, побачити свій результат можете нижче в рейтингу учасників курсу</p>
+            </div>
+        <div><a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Завантажити сертифікат</a>
+        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary">Відправити сертифікат на пошту</a>
+            </div>
+        {% else %}
+        <form method="post" action="{% url 'like' %}">
+            {% csrf_token %}
+            {% if course.id in wishlist %}
+            <button class="btn btn-primary" type="submit">Dislike</button>
+            {% else %}
+            <button class="btn btn-primary" type="submit">Like</button>
+            {% endif %}
+            <input type="hidden" value="{{course.id}}" name="id">
+        </form>
+        <form style="margin-right: auto; margin-left:2px " method="post">
+            {% csrf_token %}
+            {% if show_enroll%}
+            <button class="btn btn-primary" type="submit">Зареєструватись</button>
+            <input type="hidden" value="{{course.id}}" name="course_enroll">
+            {% else %}
+            <button class="btn btn-primary" type="submit">Покинути</button>
+            <input type="hidden" value="{{course.id}}" name="course_delete">
+            {% endif %}
+        </form>
+    {% endif %}
+    </div>
+
 {% endfor %}
 {% endblock %}
 

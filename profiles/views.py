@@ -150,10 +150,11 @@ def user_courses(request):
     if user.is_authenticated:
         courses = UserCourse.objects.filter(user_id=user.id)
         courses_pass = []
+        wishlist = get_wishlist(request)
         for course in courses:
             courses_pass.append(count_course_pass(user.id, course.course_id))
         return render(request, 'usercourses.html',
-                      context={"courses": zip(courses, courses_pass), 'user': request.user})
+                      context={"courses": zip(courses, courses_pass), 'user': request.user,'wishlist': wishlist})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
     # return HttpResponse("teacher_courses")
 
@@ -166,6 +167,7 @@ def user_course_id(request, id_course):
         print(user.id, id_course)
         count = count_course_pass(user.id, id_course)
         mark = count_course_mark(user.id, id_course)
+
         return HttpResponse(f"Результат прогресу курсу: {count}%, оцінка за курс: {mark}%")
 
 

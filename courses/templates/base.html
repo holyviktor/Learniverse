@@ -59,10 +59,33 @@ header {
   margin: 0 auto;
   padding: 20px;
   }
+  .container-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  }
  /* Додатковий стиль для підсвічення активної сторінки */
 .navbar-nav .active > .nav-link {
     background-color: #f8f9fa;
     color: #333;
+}
+
+body {
+  margin: 0;
+  padding-bottom: 60px; /* Висота футера */
+}
+
+.content-container {
+  min-height: calc(100vh - 60px); /* Висота футера */
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px 0;
 }
 </style>
 <body>
@@ -82,14 +105,14 @@ header {
                     <li class="nav-item {% if request.path == '/courses/' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'courses' %}">Доступні курси</a>
                     </li>
-                    <li class="nav-item {% if request.path == '/about/' %}active{% endif %}">
+                    <li class="nav-item {% if request.path == '/about' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'about' %}">Про нас</a>
                     </li>
-                    <li class="nav-item {% if request.path == '/wishlist/' %}active{% endif %}">
+                    <li class="nav-item {% if request.path == '/profile/wishlist' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'wishlist' %}">Вподобані</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item {% if request.path == '/profile_courses/' %}active{% endif %}">
+                        <li class="nav-item {% if request.path == '/profile/courses' %}active{% endif %}">
                             <a class="nav-link" href="{% url 'profile_courses' %}">Мої курси</a>
                         </li>
                     {% endif %}
@@ -105,16 +128,13 @@ header {
         </nav>
     </div>
 </header>
-<div class="container">
+<div class="container-content">
     {% block content %}{% endblock %}
 </div>
 <footer class="footer">
-    <!--      <div class="container">-->
-    <!--        {% block footer %}{% endblock %}-->
-    <!--      </div>-->
-    <div class="container text-center">
-        <p>&copy; 2023 Learniverse</p>
-    </div>
+  <div class="container text-center">
+    <p>&copy; 2023 Learniverse</p>
+  </div>
 </footer>
 </body>
 </html>
