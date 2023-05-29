@@ -1,75 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    .login-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-}
+    <style>
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.login-form h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
+        .login-form h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  width: 100%;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            width: 100%;
+        }
 
-.form-group label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-.form-group input[type="email"],
-.form-group input[type="password"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-}
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
 
-button[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-button[type="submit"]:hover {
-  background-color: #0062cc;
-}
+        button[type="submit"]:hover {
+            background-color: #0062cc;
+        }
 
-</style>
-<form method="post" class="login-form">
-    <h2>Увійти</h2>
-    <div class="form-group">
-         {% csrf_token %}
-        <div>
-            <label class="form-label" for="resEmail">Email</label>
-            <div class="border rounded">{{ form.email }}</div>
+    </style>
+    <form method="post" class="login-form">
+        <h2>Увійти</h2>
+        <div class="form-group">
+            {% csrf_token %}
+            <div>
+                {% if form.errors.email %}
+                    <label class="form-label" for="resEmail">Email</label>
+                    <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.email }}</div>
+                    <div style="color:#FF0000;">{{ form.errors.email }}</div>
+                {% else %}
+                    <label class="form-label" for="resEmail">Email</label>
+                    <div class="border rounded">{{ form.email }}</div>
+                {% endif %}
+            </div>
+            <div>
+
+             {% if form.errors.password %}
+                <label class="form-label" for="resPassword">Password</label>
+                <div class="border rounded" style="border:1px solid #FF0000!important">{{ form.password }}</div>
+
+                    <div style="color:#FF0000;">{{ form.errors.password }}</div>
+
+                 {%  else %}
+                 <label class="form-label" for="resPassword">Password</label>
+                <div class="border rounded">{{ form.password }}</div>
+                {% endif %}
+            </div>
         </div>
-        <div>
-            <label class="form-label" for="resPassword">Password</label>
-            <div class="border rounded">{{ form.password }}</div>
-        </div>
-    </div>
-    <button type="submit">Увійти</button>
-</form>
-    <a href="{% url 'sign_up' %}" >Зареєструватись</a>
+        <button type="submit">Увійти</button>
+    </form>
+    <a href="{% url 'sign_up' %}">Зареєструватись</a>
 
 
 {% endblock %}
