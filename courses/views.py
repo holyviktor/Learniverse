@@ -19,7 +19,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-
+from profiles.views import count_course_mark
 from django.http import HttpResponse
 from io import BytesIO
 from reportlab.pdfgen import canvas
@@ -32,8 +32,13 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from reportlab.pdfgen import canvas
 from io import BytesIO
+import io
 import os
 import pdfkit
+from django.http import FileResponse
+from django.core.cache import cache
+import pdfkit
+import whichcraft
 
 
 def if_user_has_course(user_id, course_id):
@@ -326,10 +331,16 @@ def video(request):
 def certificate(request, id):
     course = Course.objects.filter(id=id)
     user = request.user
-    return render(request, 'certificate.html', context={'course': course[0], 'user': user})
+    rating = rating_course(id)
+    if user.is_authenticated and Course.objects.filter(id=id):
+        mark = count_course_mark(user.id, id)
+    return render(request, 'certificate.html', context={'course': course[0], 'user': user,'mark':mark})
 
 
 def make_certificate(user, course):
+    mark = str(count_course_mark(user.id, course[0].id))
+    # if user.is_authenticated and Course.objects.filter(id=course.id):
+    #     mark = count_course_mark(user.id, course[0].id)
     participant_name = str(user.name) + ' ' + str(user.surname)
 
     # font_path = os.path.join(settings.BASE_DIR, 'static', 'AlegreSans-Regular.ttf')
@@ -344,7 +355,7 @@ def make_certificate(user, course):
     p.setFont(font_path, 16)
     p.drawString(100, 650, "Цей сертифікат видається")
     p.setFont(font_path, 20)
-    p.drawString(100, 600, "за успішне проходження курсу " + course[0].name)
+    p.drawString(100, 600, "за успішне проходження курсу " + course[0].name + "з оцінкою" + mark+'%')
     p.setFont(font_path, 24)
     p.drawString(100, 500, participant_name)
     p.showPage()
