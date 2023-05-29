@@ -2,19 +2,72 @@
 
 {% block content %}
 <style>
+.module-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.module-card h5 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.module-card p {
+  font-size: 14px;
+  color: gray;
+  margin: 0;
+}
+
+.module-card a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.module-card a:hover {
+  color: blue;
+}
+
+.module-card .module-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.module-card .module-details p {
+  margin-right: 10px;
+}
+
+<!--.module-card .module-details button {-->
+<!--  background-color: blue;-->
+<!--  color: white;-->
+<!--  border: none;-->
+<!--  padding: 5px 10px;-->
+<!--  cursor: pointer;-->
+<!--  transition: background-color 0.3s ease;-->
+<!--}-->
+
+<!--.module-card .module-details button:hover {-->
+<!--  background-color: darkblue;-->
+<!--}-->
 
 </style>
   {% if modules %}
     <h2>Модулі курсу:</h2>
-    {% endif %}
-    {% for module in modules %}
-    <div class="border rounded d-flex justify-content-between">
-      <div><h5>{{ module.name }}</h5>
-      <p>{{ module.duration }}</p></div>
-      <div><button><a class="nav-link" href="{% url 'module' course.id module.id %}">Переглянути</a></button></div>
+  {% endif %}
+  {% for module in modules %}
+  <div class="module-card">
+    <div class="module-details">
+      <div>
+        <h5>{{ module.name }}</h5>
+        <p>{{ module.duration }}</p>
+      </div>
+      <button><a class="nav-link" href="{% url 'module' course.id module.id %}">Переглянути</a></button>
     </div>
-    {% endfor %}
-
+  </div>
+  {% endfor %}
 {% endblock %}
-
-

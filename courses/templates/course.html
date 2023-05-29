@@ -127,6 +127,39 @@ ul {
   color: blue;
   text-decoration: none;
 }
+
+.rating-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.rating-section {
+  margin-top: 20px;
+}
+
+.rating-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.rating-bar .bar {
+  height: 30px;
+  margin-left:10px;
+  padding-left:10px;
+  background-color: #f0f0f0;
+}
+
+.rating-bar p {
+width:100px;
+  font-size: 17px;
+  font-weight: bold;
+}
+
 </style>
 <section>
     <h1>{{ course.name }}</h1>
@@ -136,6 +169,14 @@ ul {
     <p>{{ course.description }}</p>
 
     <div class="row button-row">
+        {% if is_over %}
+        <div>
+        <p>{{ user.name }}, Ви вже завершили даний курс, побачити свій результат можете нижче в рейтингу учасників курсу</p>
+            </div>
+        <div><a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Завантажити сертифікат</a>
+        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary">Відправити сертифікат на пошту</a>
+            </div>
+        {% else %}
         <form method="post" action="{% url 'like' %}">
             {% csrf_token %}
             {% if course.id in wishlist %}
@@ -155,10 +196,6 @@ ul {
             <input type="hidden" value="{{course.id}}" name="course_delete">
             {% endif %}
         </form>
-    {% if is_over %}
-        <p>Курс завершено!</p>
-        <a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Скачати сертифікат</a>
-        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary">Сертифікат на пошту</a>
     {% endif %}
     </div>
 </section>
@@ -176,10 +213,14 @@ ul {
     <a class="all-modules-link" href="{% url 'modules' course.id %}">Усі модулі</a>
     {% endif %}
 </section>
-<section>
-{% for r in rating %}
-    <p>{{r.user.name}} - {{ r.total_mark }}</p>
-{% endfor %}
+<section class="rating-section">
+    <h2>Рейтинг учасників курсу</h2>
+  {% for r in rating %}
+    <div class="rating-bar">
+        <p class="user-name">{{ r.user.name }}</p>
+      <div class="bar" style="width: {{ r.total_mark }}%;">{{ r.total_mark }}%</div>
+    </div>
+  {% endfor %}
 </section>
 {% endblock %}
 
