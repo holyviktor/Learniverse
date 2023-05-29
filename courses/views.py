@@ -7,7 +7,7 @@ from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from datetime import datetime
 
-from validate_email import validate_email
+# from validate_email import validate_email
 
 from profiles.models import User
 from courses.models import Video

@@ -1,9 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from courses.models import Category, Course, User, UserCourse
-from courses.views import enroll_course
 from profiles.views import get_wishlist
-
+from courses.views import enroll_course
 
 # Create your views here.
 

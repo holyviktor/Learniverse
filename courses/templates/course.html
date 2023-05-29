@@ -92,7 +92,41 @@ ul {
         text-decoration: underline;
     }
 
+.module-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 
+.module-card h5 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.module-card .module-link {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.module-card .module-link:hover {
+  color: blue;
+}
+
+.module-card .module-duration {
+  font-size: 14px;
+  color: gray;
+}
+
+.all-modules-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: blue;
+  text-decoration: none;
+}
 </style>
 <section>
     <h1>{{ course.name }}</h1>
@@ -133,15 +167,13 @@ ul {
     <h2>Модулі курсу</h2>
     {% endif %}
     {% for module in modules %}
-    <ul>
-        <li>
-            <h5><a class="nav-link" href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h5>
-            <span>Тривалість: {{ module.duration }}</span>
-        </li>
-    </ul>
+    <div class="module-card">
+        <h5><a class="module-link" href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h5>
+        <span class="module-duration">Тривалість: {{ module.duration }}</span>
+    </div>
     {% endfor %}
     {% if show_btn_modules %}
-    <a href="{% url 'modules' course.id %}">Усі модулі</a>
+    <a class="all-modules-link" href="{% url 'modules' course.id %}">Усі модулі</a>
     {% endif %}
 </section>
 <section>
