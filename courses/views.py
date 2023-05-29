@@ -33,6 +33,7 @@ from django.contrib.auth.models import User
 from reportlab.pdfgen import canvas
 from io import BytesIO
 import os
+import pdfkit
 
 
 def if_user_has_course(user_id, course_id):
@@ -153,10 +154,10 @@ def course_modules(request, id):
 @user_passes_test(student_check)
 def courses_id_module_id_lecture(request, id, id_module, id_lecture):
     user = request.user
-    next_lecture=''
+    next_lecture = ''
     prev_lecture = ''
-    n_lec=id_lecture+1
-    p_lec=id_lecture-1
+    n_lec = id_lecture + 1
+    p_lec = id_lecture - 1
     if Lection.objects.filter(module_id=id_module, id=n_lec):
         next_lecture = id_lecture + 1
     if Lection.objects.filter(module_id=id_module, id=p_lec):
@@ -165,14 +166,16 @@ def courses_id_module_id_lecture(request, id, id_module, id_lecture):
         return HttpResponseNotFound("not found")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
-    modules=Module.objects.filter(course_id=id)
-    lections=Lection.objects.filter(module_id=id_module)
+    modules = Module.objects.filter(course_id=id)
+    lections = Lection.objects.filter(module_id=id_module)
     tests = Test.objects.filter(module_id=id_module)
 
     if module and course:
         lectures = Lection.objects.filter(module_id=id_module, id=id_lecture)
         return render(request, 'lecture.html',
-                      context={"course": course[0], "module": module[0], 'lections':lections, 'tests':tests, 'modules':modules, 'lecture': lectures[0], 'user': request.user,'next_lecture':next_lecture,'prev_lecture':prev_lecture})
+                      context={"course": course[0], "module": module[0], 'lections': lections, 'tests': tests,
+                               'modules': modules, 'lecture': lectures[0], 'user': request.user,
+                               'next_lecture': next_lecture, 'prev_lecture': prev_lecture})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
     # return HttpResponseNotFound("not found")
 
@@ -203,7 +206,7 @@ def courses_id(request, id):
         return render(request, 'course.html', context={"course": course[0], "modules": modules,
                                                        "show_enroll": show_enroll, 'user': request.user,
                                                        "show_btn_modules": show_btn_modules, 'wishlist': wishlist,
-                                                       'rating': rating, 'is_over':is_over})
+                                                       'rating': rating, 'is_over': is_over})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
     # return HttpResponseNotFound("not found")
 
@@ -233,7 +236,8 @@ def courses_id_module_id(request, id, id_module):
     if Module.objects.filter(id=p_mod):
         prev_mod = id_module - 1
     if not if_user_has_course(user.id, id):
-        return render(request, 'error.html', context={'error': 'Для перегляду модулів курсу спочатку зареєструйтесь на курс'})
+        return render(request, 'error.html',
+                      context={'error': 'Для перегляду модулів курсу спочатку зареєструйтесь на курс'})
         # return HttpResponseNotFound("Для перегляду модулів курсу спочатку зареєструйтесь на курс.")
     course = Course.objects.filter(id=id)
     module = Module.objects.filter(id=id_module, course_id=id)
@@ -242,7 +246,7 @@ def courses_id_module_id(request, id, id_module):
         tests = Test.objects.filter(module_id=id_module)
         return render(request, 'module.html',
                       context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests,
-                               'user': request.user,'prev_mod':prev_mod,'next_mod':next_mod})
+                               'user': request.user, 'prev_mod': prev_mod, 'next_mod': next_mod})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
     # return HttpResponseNotFound("not found")
 
@@ -301,8 +305,8 @@ def courses_id_module_id_test(request, id, id_module, id_test):
                 # print("Курс завершено!")
             # return HttpResponse(f"Your mark is {mark}/{count_questions}")
             return render(request, 'result_test.html',
-                          context={"mark": mark, "count_questions":count_questions, "message_course_over":message_course_over})
-
+                          context={"mark": mark, "count_questions": count_questions,
+                                   "message_course_over": message_course_over})
 
     if module and course:
         tests = Test.objects.filter(module_id=id_module, id=id_test)
@@ -317,6 +321,12 @@ def courses_id_module_id_test(request, id, id_module, id_test):
 def video(request):
     videos = Video.objects.filter()
     return render(request, 'vid.html', context={"videos": videos, 'user': request.user})
+
+
+def certificate(request, id):
+    course = Course.objects.filter(id=id)
+    user = request.user
+    return render(request, 'certificate.html', context={'course': course[0], 'user': user})
 
 
 def make_certificate(user, course):
@@ -342,13 +352,18 @@ def make_certificate(user, course):
     buffer.seek(0)
     return buffer
 
+
 def generate_certificate(request, id):
     user = request.user
     course = Course.objects.filter(id=id)
     buffer = make_certificate(user, course)
+    # path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    # config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    # pdfkit.from_url("http://127.0.0.1:8000/courses/1/certificate", "zvit.pdf", configuration=config)
     response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="certificate.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="cert.pdf"'
     return response
+
 
 def send_certificate(request, id):
     user = request.user

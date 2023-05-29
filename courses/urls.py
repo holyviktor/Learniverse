@@ -13,7 +13,8 @@ urlpatterns = [
          name="lecture"),
     path('<int:id>/module/<int:id_module>/test/<int:id_test>', views.courses_id_module_id_test, name="test"),  #
     path('video', views.video),
-    path('<int:id>/certificate', views.generate_certificate, name='generate_certificate'),
+    path('<int:id>/certificate', views.certificate, name='certificate'),
+    path('<int:id>/generate_certificate', views.generate_certificate, name='generate_certificate'),
     path('<int:id>/send_certificate', views.send_certificate, name='send_certificate'),
     # path('<int:id>/download-certificate/', views.download_certificate, name='download_certificate'),
 ]

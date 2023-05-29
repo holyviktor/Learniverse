@@ -40,9 +40,9 @@
 <body>
   <div class="certificate">
     <h2>СЕРТИФІКАТ</h2>
-    <p>Цей сертифікат видається</p>
-    <p class="course">за успішне проходження курсу Django</p>
-    <p class="name">Ім'я учасника</p>
+    <p>Цей сертифікат отримує {{ user.name }} {{ user.surname}}</p>
+    <p>за успішне проходження курсу </p>
+    <p class="course">"{{ course.name }}"</p>
   </div>
 </body>
 </html>
