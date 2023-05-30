@@ -8,6 +8,7 @@
     <p>Ваша оцінка: {{ mark }}/{{ count_questions }} </p>
     {% if message_course_over %}
         <h2>Вітаємо! Ви завершили курс.</h2>
-{% endif %}
+    {% endif %}
+<h5><a href="{% url 'course' course_id %}">Повернутись до курсу</a></h5>
 </div>
 {% endblock %}

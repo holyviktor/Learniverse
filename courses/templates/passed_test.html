@@ -28,6 +28,7 @@
 <div class="course-container">
     <h2>Тест вже пройдено!</h2>
     <p>Ви вже проходили цей тест. Ваша оцінка: {{ grade }}</p>
+    <h5><a href="{% url 'course' course_id %}">Повернутись до курсу</a></h5>
 </div>
 {% endblock %}
 
