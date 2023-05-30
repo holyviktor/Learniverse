@@ -70,7 +70,9 @@
         </form>
     {% endif %}
     </div>
-
+{% empty %}
+        <p>У вас немає обраних курсів.</p>
+    <h5><a class="btn btn-primary" href="{% url 'courses'%}">Зареєстуватись на курси</a></h5>
 {% endfor %}
 {% endblock %}
 
