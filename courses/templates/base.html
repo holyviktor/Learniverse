@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="../static/courses/css/style.css">
+    <link rel="stylesheet" href="{% static 'courses/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <!-- підключення скриптів Bootstrap -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
@@ -51,6 +51,7 @@ header {
 
 .footer p {
   margin: 0;
+  margin-bottom:0;
 }
 
 /* Стилі для контенту сайту */
@@ -72,21 +73,13 @@ header {
 
 body {
   margin: 0;
-  padding-bottom: 60px; /* Висота футера */
+  padding-bottom: 0px; /* Висота футера */
 }
 
 .content-container {
   min-height: calc(100vh - 60px); /* Висота футера */
 }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #f0f0f0;
-  padding: 10px 0;
-}
 </style>
 <body>
 <header class="header">
@@ -138,4 +131,3 @@ body {
 </footer>
 </body>
 </html>
-

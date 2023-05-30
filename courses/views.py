@@ -345,6 +345,7 @@ def make_certificate(user, course):
 
     # font_path = os.path.join(settings.BASE_DIR, 'static', 'AlegreSans-Regular.ttf')
     # font_path = os.path.join(os.path.dirname(__file__), 'static', 'AlegreSans-Regular.ttf')
+    # font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'AlegreSans-Regular.ttf')
     font_path = "Helvetica"
     # Генерація сертифіката у форматі PDF
     buffer = BytesIO()

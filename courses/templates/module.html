@@ -1,32 +1,98 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    /* Стилі для секцій */
+    .section {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .section h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Стилі для списків */
+    .lecture-list,
+    .test-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .lecture-list li,
+    .test-list li {
+        margin-bottom: 10px;
+    }
+
+    /* Стилі для посилань */
+    .lecture-link,
+    .test-link {
+        color: #0000FF;
+        text-decoration: none;
+    }
+
+    .lecture-link:hover,
+    .test-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Стилі для лекцій */
+    .lecture-section {
+        background-color: #f9f9f9;
+    }
+
+    /* Стилі для тестів */
+    .test-section {
+        background-color: #eef2f5;
+    }
+</style>
+
+
+
 <h1>{{ course.name }}</h1>
 
 {% if module %}
     <h2>Модуль: {{ module.name }}</h2>
-    <div>
-        <p>{{ module.duration }}</p>
+<p>{{ module.duration }}</p>
+    <div class="section lecture-section">
         <h3>Лекції модулю</h3>
-        {% for lection in lections %}
-        <a class="nav-link" href="{% url 'lecture' course.id module.id lection.id %}"><h5>{{ lection.title }}</h5></a>
-        {% endfor %}
-        <h3>Тестування</h3>
-        {% for test in tests %}
-            <a href="{% url 'test' course.id module.id test.id %}">{{ test.title }}</a>
-        {% endfor %}
+        <ul class="lecture-list">
+            {% for lection in lections %}
+                <li>
+                    <a class="lecture-link" href="{% url 'lecture' course.id module.id lection.id %}">
+                        <h5>{{ lection.title }}</h5>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-{% if prev_mod %}
-            <a href="{% url 'module' course.id prev_mod %}" class="btn btn-primary">
-                Попередній модуль
-            </a>
-            {% endif %}
 
-            {% if next_mod %}
-            <a href="{% url 'module' course.id next_mod %}" class="btn btn-primary">
-                Наступний модуль
-            </a>
-            {% endif %}
+    <div class="section test-section">
+        <h3>Тестування</h3>
+        <ul class="test-list">
+            {% for test in tests %}
+                <li>
+                    <a class="test-link" href="{% url 'test' course.id module.id test.id %}">
+                        {{ test.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if prev_mod %}
+        <a href="{% url 'module' course.id prev_mod %}" class="btn btn-primary">
+            Попередній модуль
+        </a>
+    {% endif %}
+
+    {% if next_mod %}
+        <a href="{% url 'module' course.id next_mod %}" class="btn btn-primary">
+            Наступний модуль
+        </a>
+    {% endif %}
 {% endif %}
-
 {% endblock %}
