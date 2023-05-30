@@ -155,7 +155,13 @@ def student_check(user):
 @login_required(login_url='login')
 @user_passes_test(student_check)
 def user_courses(request):
+    from courses.views import enroll_course
     user = request.user
+    if request.method == 'POST':
+        if user.is_authenticated:
+            enroll_course(request)
+        else:
+            return redirect('login')
     if user.is_authenticated:
         courses = UserCourse.objects.filter(user_id=user.id)
         courses_pass = []
