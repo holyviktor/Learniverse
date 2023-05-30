@@ -147,7 +147,7 @@ def profiles_logout(request):
 
 def student_check(user):
     if user.is_authenticated:
-        return user.role == "student"
+        return user.role == "student" or user.role == "teacher" or user.role == "admin"
     else:
         return False
 
