@@ -159,7 +159,9 @@ def user_courses(request):
     user = request.user
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     if user.is_authenticated:
@@ -200,7 +202,9 @@ def student_wishlist(request):
     user = request.user
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     if 'Wishlist_user' in request.COOKIES:

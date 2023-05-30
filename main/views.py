@@ -11,7 +11,9 @@ def main_index(request):
     user = request.user
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     show_course_enroll = {}

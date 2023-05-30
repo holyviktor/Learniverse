@@ -75,8 +75,11 @@ def enroll_course(request):
             user_course = UserCourse.objects.filter(user_id=user, course_id=course)
             print(user_course)
             if user_course:
-                user_course.delete()
-                form_delete.cleaned_data['course_delete'] = None
+                if user_course.first().certified:
+                    return 'Ви не можете покинути пройдений курс.'
+                else:
+                    user_course.delete()
+                    form_delete.cleaned_data['course_delete'] = None
                 # return redirect('profile')
 
 
@@ -104,7 +107,9 @@ def courses_index(request):
     # user_id = request.session.get('user_id')
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     show_course_enroll = {}
@@ -187,7 +192,9 @@ def courses_id(request, id):
 
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     show_enroll = True
