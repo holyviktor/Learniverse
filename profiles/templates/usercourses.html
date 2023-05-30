@@ -60,17 +60,15 @@
         </form>
         <form style="margin-right: auto; margin-left:2px " method="post">
             {% csrf_token %}
-            {% if show_enroll%}
-            <button class="btn btn-primary" type="submit">Зареєструватись</button>
-            <input type="hidden" value="{{course.id}}" name="course_enroll">
-            {% else %}
+
             <button class="btn btn-primary" type="submit">Покинути</button>
-            <input type="hidden" value="{{course.id}}" name="course_delete">
-            {% endif %}
+            <input type="hidden" value="{{course.course.id}}" name="course_delete">
         </form>
     {% endif %}
     </div>
-
+{% empty %}
+        <p>У вас немає обраних курсів.</p>
+    <h5><a class="btn btn-primary" href="{% url 'courses'%}">Зареєстуватись на курси</a></h5>
 {% endfor %}
 {% endblock %}
 

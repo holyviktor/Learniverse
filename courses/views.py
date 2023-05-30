@@ -32,13 +32,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from reportlab.pdfgen import canvas
 from io import BytesIO
-import io
-import os
-import pdfkit
-from django.http import FileResponse
-from django.core.cache import cache
-import pdfkit
-import whichcraft
 
 
 def if_user_has_course(user_id, course_id):
@@ -82,8 +75,11 @@ def enroll_course(request):
             user_course = UserCourse.objects.filter(user_id=user, course_id=course)
             print(user_course)
             if user_course:
-                user_course.delete()
-                form_delete.cleaned_data['course_delete'] = None
+                if user_course.first().certified:
+                    return 'Ви не можете покинути пройдений курс.'
+                else:
+                    user_course.delete()
+                    form_delete.cleaned_data['course_delete'] = None
                 # return redirect('profile')
 
 
@@ -111,7 +107,9 @@ def courses_index(request):
     # user_id = request.session.get('user_id')
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     show_course_enroll = {}
@@ -194,7 +192,9 @@ def courses_id(request, id):
 
     if request.method == 'POST':
         if user.is_authenticated:
-            enroll_course(request)
+            error = enroll_course(request)
+            if error:
+                return render(request, 'error.html', context={'error': error})
         else:
             return redirect('login')
     show_enroll = True
@@ -271,7 +271,7 @@ def courses_id_module_id_test(request, id, id_module, id_test):
             user_test = user_test[0]
             # return HttpResponse(f"Ви вже проходили цей тест. Ваша оцінка: {user_test.grade}%.")
             return render(request, 'passed_test.html',
-                          context={"grade": user_test.grade})
+                          context={"grade": user_test.grade, "course_id":course[0].id})
     if request.method == 'POST':
         count_questions = Question.objects.filter(test_id=id_test).count()
         form_test = TestForm(request.POST)
@@ -311,7 +311,7 @@ def courses_id_module_id_test(request, id, id_module, id_test):
             # return HttpResponse(f"Your mark is {mark}/{count_questions}")
             return render(request, 'result_test.html',
                           context={"mark": mark, "count_questions": count_questions,
-                                   "message_course_over": message_course_over})
+                                   "message_course_over": message_course_over, "course_id":course[0].id})
 
     if module and course:
         tests = Test.objects.filter(module_id=id_module, id=id_test)
