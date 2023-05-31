@@ -32,7 +32,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from reportlab.pdfgen import canvas
 from io import BytesIO
-
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import landscape, A5
 
 def if_user_has_course(user_id, course_id):
     user_course = UserCourse.objects.filter(user_id=user_id, course_id=course_id)
@@ -339,26 +341,40 @@ def certificate(request, id):
 
 def make_certificate(user, course):
     mark = str(count_course_mark(user.id, course[0].id))
-    # if user.is_authenticated and Course.objects.filter(id=course.id):
-    #     mark = count_course_mark(user.id, course[0].id)
     participant_name = str(user.name) + ' ' + str(user.surname)
 
     # font_path = os.path.join(settings.BASE_DIR, 'static', 'AlegreSans-Regular.ttf')
     # font_path = os.path.join(os.path.dirname(__file__), 'static', 'AlegreSans-Regular.ttf')
     # font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'AlegreSans-Regular.ttf')
     font_path = "Helvetica"
-    # Генерація сертифіката у форматі PDF
     buffer = BytesIO()
-    p = canvas.Canvas(buffer)
+    p = canvas.Canvas(buffer, pagesize=landscape(A5), bottomup=0)
 
+    # Задаємо шрифт, розмір і колір для заголовка сертифіката
     p.setFont(font_path, 24)
-    p.drawString(100, 700, "Сертифікат")
+    p.setFillColor(colors.black)
+    p.drawCentredString(A5[1] / 2, 100, "Learniverse certificate")
+
+    # Задаємо шрифт, розмір і колір для тексту про видачу сертифіката
     p.setFont(font_path, 16)
-    p.drawString(100, 650, "Цей сертифікат видається")
+    p.setFillColor(colors.black)
+    p.drawCentredString(A5[1] / 2, 150, "This certificate is issued for successful completion of the course:")
+
+    # Задаємо шрифт, розмір і колір для назви курсу
     p.setFont(font_path, 20)
-    p.drawString(100, 600, "за успішне проходження курсу " + course[0].name + "з оцінкою" + mark+'%')
+    p.setFillColor(colors.blue)
+    p.drawCentredString(A5[1] / 2, 180, f"«{course[0].name}»")
+
+    # Задаємо шрифт, розмір і колір для отриманого балу
+    p.setFont(font_path, 16)
+    p.setFillColor(colors.black)
+    p.drawCentredString(A5[1] / 2, 210, f"With a score of: {mark}%")
+
+    # Задаємо шрифт, розмір і колір для імені учасника
     p.setFont(font_path, 24)
-    p.drawString(100, 500, participant_name)
+    p.setFillColor(colors.black)
+    p.drawCentredString(A5[1] / 2, 250, participant_name)
+
     p.showPage()
     p.save()
     buffer.seek(0)
