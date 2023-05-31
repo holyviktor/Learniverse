@@ -188,12 +188,7 @@ def user_course_id(request, id_course):
         return HttpResponse(f"Результат прогресу курсу: {count}%, оцінка за курс: {mark}%")
 
 
-def teacher_add_courses(request):
-    return HttpResponse("teacher_add_course")
 
-
-def teacher_delete_id(request):
-    return HttpResponse("teacher_delete_id")
 
 
 def student_wishlist(request):
@@ -212,7 +207,9 @@ def student_wishlist(request):
         wishlist = cookie.split(',')
         wishlist = list(map(int, wishlist))
         for i in wishlist:
-            courses.append(Course.objects.get(id=i))
+            course = Course.objects.filter(id=i)
+            if course:
+                courses.append(course[0])
     show_course_enroll = {}
 
     for course in courses:
