@@ -10,8 +10,6 @@ urlpatterns = [
     path('logout', views.profiles_logout, name="logout"),
     path('courses', views.user_courses, name="profile_courses"),
     path('course/<int:id_course>', views.user_course_id, name="user_course"),
-    path('add_course', views.teacher_add_courses),
-    path('delete_course/<int:id_course>', views.teacher_delete_id),
     path('change_wish_list', views.change_wishlist, name="like"),
     # path('delete_course_to_wish_list', views.del_course_to_wishlist, name="dislike"),
     path('wishlist', views.student_wishlist, name='wishlist')
