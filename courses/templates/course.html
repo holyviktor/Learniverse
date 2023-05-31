@@ -160,23 +160,26 @@ width:100px;
   font-weight: bold;
 }
 
+
 </style>
 <section>
-
     <h1>{{ course.name }}</h1>
     <p>Категорія: {{ course.category.name }}</p>
     <p>Тривалість: {{ course.duration }}
     <p>Викладач: {{ course.teacher.name }} {{ course.teacher.surname }}</p>
     <p>{{ course.description }}</p>
-
+</section>
+<section>
     <div class="row button-row">
         {% if is_over %}
         <div>
-        <p>{{ user.name }}, Ви вже завершили даний курс, побачити свій результат можете нижче в рейтингу учасників курсу</p>
-            </div>
+            <p>{{ user.name }}, Ви вже завершили даний курс, побачити свій результат можете нижче в рейтингу учасників
+                курсу</p>
+        </div>
         <div><a href="{% url 'generate_certificate' course.id %}" class="btn btn-primary">Завантажити сертифікат</a>
-        <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary" onclick="">Відправити сертифікат на пошту</a>
-            </div>
+            <a href="{% url 'send_certificate' course.id %}" class="btn btn-primary" onclick="">Відправити сертифікат на
+                пошту</a>
+        </div>
         {% else %}
         <form method="post" action="{% url 'like' %}">
             {% csrf_token %}
@@ -197,13 +200,13 @@ width:100px;
             <input type="hidden" value="{{course.id}}" name="course_delete">
             {% endif %}
         </form>
-    {% endif %}
+        {% endif %}
     </div>
 </section>
 <section>
     {% if modules %}
     <h2>Модулі курсу</h2>
-{% endif %}
+    {% endif %}
     {% if show_btn_modules %}
     {% for module in modules %}
     <div class="module-card">
@@ -218,12 +221,12 @@ width:100px;
 </section>
 <section class="rating-section">
     <h2>Рейтинг учасників курсу</h2>
-  {% for r in rating %}
+    {% for r in rating %}
     <div class="rating-bar">
         <p class="user-name">{{ r.user.name }}</p>
-      <div class="bar" style="width: {{ r.total_mark }}%;">{{ r.total_mark }}%</div>
+        <div class="bar" style="width: {{ r.total_mark }}%;">{{ r.total_mark }}%</div>
     </div>
-  {% endfor %}
+    {% endfor %}
 </section>
 
 
