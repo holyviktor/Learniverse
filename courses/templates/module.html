@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block title %}{{ course.name }}{% endblock %}
 {% block content %}
 <style>
     /* Стилі для секцій */
@@ -56,7 +56,7 @@
 
 {% if module %}
     <h2>Модуль: {{ module.name }}</h2>
-<p>{{ module.duration }}</p>
+<p>{{ module.duration }} тиж</p>
     <div class="section lecture-section">
         <h3>Лекції модулю</h3>
         <ul class="lecture-list">

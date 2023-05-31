@@ -389,7 +389,7 @@ def generate_certificate(request, id):
     # config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
     # pdfkit.from_url("http://127.0.0.1:8000/courses/1/certificate", "zvit.pdf", configuration=config)
     response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="cert.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="Learniverse_certificate.pdf"'
     return response
 
 

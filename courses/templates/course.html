@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block title %}{{ course.name }}{% endblock %}
 {% block content %}
 <style>
 
@@ -211,7 +211,7 @@ width:100px;
     {% for module in modules %}
     <div class="module-card">
         <h5><a class="module-link" href="{% url 'module' course.id module.id %}">{{ module.name }}</a></h5>
-        <span class="module-duration">Тривалість: {{ module.duration }}</span>
+        <span class="module-duration">Тривалість: {{ module.duration }} тиж</span>
     </div>
     {% endfor %}
     <a class="all-modules-link" href="{% url 'modules' course.id %}">Усі модулі</a>
