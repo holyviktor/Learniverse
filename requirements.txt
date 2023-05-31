@@ -1,4 +1,3 @@
-﻿aiogram==2.25.1
 aiohttp==3.8.4
 aiosignal==1.3.1
 altgraph==0.17.3
@@ -57,7 +56,6 @@ PyDNS2==0.1.1
 pyinstaller==5.10.1
 pyinstaller-hooks-contrib==2023.2
 pyparsing==3.0.9
-pypiwin32==223
 pyTelegramBotAPI==4.10.0
 python-dateutil==2.8.2
 pyttsx3==2.90
