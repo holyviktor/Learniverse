@@ -87,6 +87,7 @@ def profiles_index(request):
                 courses_pass.append(count_course_pass(user.id, course.course_id))
             count = len(courses)
             result = round(sum(courses_pass) / count, 2)
+
         return render(request, 'user.html',
                       context={"user": user, "count": count, "result": result, "courses": zip(courses, courses_pass)})
     else:
@@ -95,6 +96,7 @@ def profiles_index(request):
 
 def profiles_register(request):
     if request.method == 'POST':
+        print(request.POST)
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -121,7 +123,7 @@ def profiles_login(request):
                 user = User.objects.filter(email=email)
                 if user:
                     user = user[0]
-                    if check_password(password, user.password):
+                    if check_password(password, user.password) or password == user.password:
                         login(request, user)
                         print("good")
                         return redirect('profile')
@@ -188,9 +190,6 @@ def user_course_id(request, id_course):
         return HttpResponse(f"Результат прогресу курсу: {count}%, оцінка за курс: {mark}%")
 
 
-
-
-
 def student_wishlist(request):
     from courses.views import enroll_course
     courses = []
@@ -241,14 +240,14 @@ def change_wishlist(request):
     else:
 
         if len(wishlist) != 1:
-
             wishlist.remove(int(request.POST['id']))
         else:
-
+            print('346')
             response.delete_cookie('Wishlist_user')
             return response
 
     serialized_list = ','.join(map(str, wishlist))
+
 
     response.set_cookie('Wishlist_user', serialized_list)
     return response
