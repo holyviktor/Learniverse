@@ -3,38 +3,23 @@ from email.message import EmailMessage
 from itertools import chain
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponse, Http404, HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponseNotFound
+from django.shortcuts import redirect
 from datetime import datetime
 
-# from validate_email import validate_email
-
-from profiles.models import User
 from courses.models import Video
 from profiles.views import student_check, get_wishlist, rating_course
 from .form import EnrollForm, DeleteForm, TestForm
 from .models import Category, Course, Module, Lection, Test, Question, Answer, UserCourse, UserTest
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 from profiles.views import count_course_mark
 from django.http import HttpResponse
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.conf import settings
-from django.contrib.auth.models import User
+from django.shortcuts import render
 from reportlab.pdfgen import canvas
 from io import BytesIO
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
 from reportlab.lib.pagesizes import landscape, A5
+
 
 def if_user_has_course(user_id, course_id):
     user_course = UserCourse.objects.filter(user_id=user_id, course_id=course_id)
@@ -44,45 +29,29 @@ def if_user_has_course(user_id, course_id):
 def enroll_course(request):
     form_enroll = EnrollForm(request.POST)
     form_delete = DeleteForm(request.POST)
-    print("here?")
     if form_enroll.is_valid():
         if form_enroll.cleaned_data['course_enroll']:
-
-            # print("enroll")
             now = datetime.now()
             course_id = form_enroll.cleaned_data['course_enroll']
             user = request.user
-            # user_id = request.session.get('user_id')
-            # user = User.objects.get(id=user_id)
-
-            # print(user.id)
             course = Course.objects.get(id=course_id)
             user_course = UserCourse.objects.filter(user_id=user, course_id=course)
             if not user_course:
-                # print(course.id)
-                # print(now.strftime("%Y/%m/%d %H:%M:%S"))
                 a = UserCourse(date_start=now.strftime("%Y-%m-%d %H:%M"), user=user, course=course)
                 a.save()
                 form_enroll.cleaned_data['course_enroll'] = None
     if form_delete.is_valid():
         if form_delete.cleaned_data['course_delete']:
-
-            # print("delete")
             course_id = form_delete.cleaned_data['course_delete']
             user = request.user
-            # user_id = request.session.get('user_id')
-            # user = User.objects.get(id=user_id)
-            print(user.id)
             course = Course.objects.get(id=course_id)
             user_course = UserCourse.objects.filter(user_id=user, course_id=course)
-            print(user_course)
             if user_course:
                 if user_course.first().certified:
                     return 'Ви не можете покинути пройдений курс.'
                 else:
                     user_course.delete()
                     form_delete.cleaned_data['course_delete'] = None
-                # return redirect('profile')
 
 
 def courses_index(request):
@@ -103,10 +72,7 @@ def courses_index(request):
         courses_search_name = Course.objects.filter(name__icontains=search_text)
         courses_search_descr = Course.objects.filter(description__icontains=search_text)
         courses = chain(courses_search_name, courses_search_descr, courses)
-
-    print(courses)
     user = request.user
-    # user_id = request.session.get('user_id')
     if request.method == 'POST':
         if user.is_authenticated:
             error = enroll_course(request)
@@ -124,8 +90,6 @@ def courses_index(request):
                 show_course_enroll[course] = True
         else:
             show_course_enroll[course] = True
-    print(show_course_enroll)
-    # return render(request, 'login.html', {'form': form})
     wishlist = get_wishlist(request)
     return render(request, 'courses.html',
                   context={"courses": show_course_enroll, "categories": categories, "wishlist": wishlist,
@@ -152,7 +116,6 @@ def course_modules(request, id):
         return render(request, 'course_modules.html',
                       context={"course": course[0], "modules": modules, 'user': request.user})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
-    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -190,8 +153,6 @@ def courses_id(request, id):
     show_btn_modules = False
     course = Course.objects.filter(id=id)
     user = request.user
-    # user_id = request.session.get('user_id')
-
     if request.method == 'POST':
         if user.is_authenticated:
             error = enroll_course(request)
@@ -255,7 +216,6 @@ def courses_id_module_id(request, id, id_module):
                       context={"course": course[0], "module": module[0], "lections": lections, 'tests': tests,
                                'user': request.user, 'prev_mod': prev_mod, 'next_mod': next_mod})
     return render(request, 'error.html', context={'error': 'Уппс, щось сталось))'})
-    # return HttpResponseNotFound("not found")
 
 
 @login_required
@@ -275,11 +235,11 @@ def courses_id_module_id_test(request, id, id_module, id_test):
             return render(request, 'passed_test.html',
                           context={"grade": user_test.grade, "course_id":course[0].id})
     if request.method == 'POST':
+        print(request.POST)
         count_questions = Question.objects.filter(test_id=id_test).count()
         form_test = TestForm(request.POST)
         user_answers = {}
         if form_test.is_valid():
-            # print("here!")
             mark = 0
             questions = Question.objects.filter(test_id=id_test)
             print(questions)
@@ -302,15 +262,11 @@ def courses_id_module_id_test(request, id, id_module, id_test):
                 for test_item in test:
                     user_tests = UserTest.objects.filter(test_id=test_item.id, user_id=user.id)
                     count_user_tests += user_tests.count()
-            print(count_tests)
-            print(count_user_tests)
             if count_user_tests >= count_tests:
                 user_course = UserCourse.objects.filter(user_id=user.id, course_id=course[0].id).first()
                 user_course.certified = 1
                 user_course.save()
                 message_course_over = True
-                # print("Курс завершено!")
-            # return HttpResponse(f"Your mark is {mark}/{count_questions}")
             return render(request, 'result_test.html',
                           context={"mark": mark, "count_questions": count_questions,
                                    "message_course_over": message_course_over, "course_id":course[0].id})
@@ -342,10 +298,6 @@ def certificate(request, id):
 def make_certificate(user, course):
     mark = str(count_course_mark(user.id, course[0].id))
     participant_name = str(user.name) + ' ' + str(user.surname)
-
-    # font_path = os.path.join(settings.BASE_DIR, 'static', 'AlegreSans-Regular.ttf')
-    # font_path = os.path.join(os.path.dirname(__file__), 'static', 'AlegreSans-Regular.ttf')
-    # font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'AlegreSans-Regular.ttf')
     font_path = "Helvetica"
     buffer = BytesIO()
     p = canvas.Canvas(buffer, pagesize=landscape(A5), bottomup=0)
@@ -360,17 +312,14 @@ def make_certificate(user, course):
     p.setFillColor(colors.black)
     p.drawCentredString(A5[1] / 2, 150, "This certificate is issued for successful completion of the course:")
 
-    # Задаємо шрифт, розмір і колір для назви курсу
     p.setFont(font_path, 20)
     p.setFillColor(colors.blue)
     p.drawCentredString(A5[1] / 2, 180, f"«{course[0].name}»")
 
-    # Задаємо шрифт, розмір і колір для отриманого балу
     p.setFont(font_path, 16)
     p.setFillColor(colors.black)
     p.drawCentredString(A5[1] / 2, 210, f"With a score of: {mark}%")
 
-    # Задаємо шрифт, розмір і колір для імені учасника
     p.setFont(font_path, 24)
     p.setFillColor(colors.black)
     p.drawCentredString(A5[1] / 2, 250, participant_name)
@@ -385,9 +334,6 @@ def generate_certificate(request, id):
     user = request.user
     course = Course.objects.filter(id=id)
     buffer = make_certificate(user, course)
-    # path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
-    # config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-    # pdfkit.from_url("http://127.0.0.1:8000/courses/1/certificate", "zvit.pdf", configuration=config)
     response = HttpResponse(buffer, content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Learniverse_certificate.pdf"'
     return response
